@@ -1,0 +1,15 @@
+# Dependencias
+node_modules/
+
+# Builds
+dist/
+dist-single/
+
+# Paquetes generados para compartir
+paquete-escritorio/
+paquete-web/
+compartir/
+
+# Logs / temporales
+*.log
+.DS_Store
