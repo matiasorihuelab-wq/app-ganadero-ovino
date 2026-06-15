@@ -12,4 +12,5 @@ compartir/
 
 # Logs / temporales
 *.log
+*.tsbuildinfo
 .DS_Store
