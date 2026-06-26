@@ -25,7 +25,12 @@ const cmd = process.argv[2]
 
 function pidsOnPort(port) {
   try {
-    const out = execSync('netstat -ano -p tcp', { encoding: 'utf8' })
+    // Sin "-p tcp": ese filtro en Windows lista SOLO IPv4 y deja afuera los
+    // listeners IPv6 (TCPv6, ej. [::1]:5174). Vite escucha en ::1, así que con
+    // el filtro el stop no lo veía y quedaba un proceso huérfano en el puerto.
+    // "netstat -ano" incluye TCP y TCPv6; las líneas UDP no traen LISTENING y
+    // las descarta el filtro de abajo.
+    const out = execSync('netstat -ano', { encoding: 'utf8' })
     const pids = new Set()
     for (const line of out.split('\n')) {
       if (line.includes(`:${port} `) && line.includes('LISTENING')) {
