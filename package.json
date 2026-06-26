@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:single": "tsc -b && vite build --config vite.config.singlefile.ts",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "bench:start": "node scripts/bench_app.mjs start",
+    "bench:status": "node scripts/bench_app.mjs status",
+    "bench:stop": "node scripts/bench_app.mjs stop"
   },
   "dependencies": {
     "react": "^18.3.1",
