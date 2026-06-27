@@ -14,3 +14,10 @@ compartir/
 *.log
 *.tsbuildinfo
 .DS_Store
+
+# Artefactos del browser bench
+.bench_app.json
+.bench_app.log
+
+# Historial local de codex-bridge (DB de reviews; no versionar)
+reviews.db

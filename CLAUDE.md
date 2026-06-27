@@ -1,47 +1,71 @@
-# App de Análisis de Rentabilidad Ovina
+# CLAUDE.md — Protocolo de autonomía (App Rentabilidad Ovina)
 
-Aplicación web (React + TypeScript + Vite) para analizar la rentabilidad económica y
-productiva de un establecimiento **ovino**. Es un **template genérico** (sirve para
-cualquier raza); todos los campos arrancan en 0 y el usuario carga sus datos.
+Versión liviana del protocolo. Esta app es una SPA React + TS + Vite, sin
+backend, sin DB, sin auth. El estado persiste en `localStorage`
+(clave `ganadero_escenarios_v1`). El motor de cálculo (`src/engine/calc.ts`)
+está validado contra un Excel de referencia (18/18 vía `scripts/validate.ts`).
 
-El motor de cálculo replica **exactamente** la lógica de una planilla Excel de referencia
-(modelo Merino Australiano). La validación está en `scripts/validate.ts` y compara 18
-resultados clave contra los números del Excel (deben coincidir con precisión < 1e-6).
+## Roles
 
-## Comandos
+- **Code** (Claude Code): único escritor del repo. Implementa, testea, commitea.
+- **ChatGPT/Codex** (vía MCP `codex-bridge`): auditor externo, solo lee.
+- **Mauri**: decisor de producto + validación visual final.
 
-```bash
-npm install
-npm run dev            # servidor de desarrollo (http://localhost:5174)
-npm run build          # build web/PWA en dist/
-npm run build:single   # build de un solo archivo HTML autocontenido en dist-single/
-node --experimental-strip-types scripts/validate.ts   # QA: valida el motor vs Excel
-node scripts/gen-icons.mjs                             # regenera los íconos PNG desde el SVG
-```
+## Los oráculos
 
-## Arquitectura
+### [BENCH] — Code puede seguir solo
+Si las aserciones automáticas pasan, Code avanza sin preguntar. El bench acá es:
+- `npm run build` (tsc -b + vite build) en verde.
+- `node --experimental-strip-types scripts/validate.ts` con exit 0 (18/18 vs Excel).
+  (El `Assertion failed ... async.c` de libuv al cerrar es ruido, no falla.
+   Vale el exit code, no el stderr.)
 
-- `src/engine/` — lógica pura (sin UI):
-  - `types.ts` — modelo de datos (`Inputs` / `Resultados`).
-  - `calc.ts` — **motor principal**, réplica fiel del Excel (cada bloque cita su celda).
-  - `presets.ts` — preset vacío (genérico) y preset ejemplo (Merino Australiano para QA).
-  - `timeline.ts` — evolución temporal / cash flow mensual (reconcilia con el margen neto).
-  - `neb.ts` — necesidades energéticas (NEB) por categoría.
-- `src/components/` — UI: `Formulario`, `Resultados` (dashboard), `Timeline`, `Neb`,
-  `Modales` (guardar/cargar/comparar escenarios), `Campos` (inputs reutilizables).
-- `src/utils/` — `format`, `scenarios` (localStorage), `validaciones`, `exportar` (CSV/PDF).
+### [BROWSER-BENCH] — Code valida en la app real
+Cuando el cambio toca UI, cálculo visible, gráficos o persistencia, Code abre
+`localhost:5174` y valida como usuario antes de reportar. Procedimiento:
+1. `npm run bench:start` y `npm run bench:status` -> `LISTO PARA BENCH: true`.
+2. Navegar con el browser MCP; **aserciones de DOM y `localStorage`**, no
+   solo screenshots (el screenshot da timeout con Recharts).
+3. Si se toca `localStorage`, guardarlo antes y restaurarlo después.
+4. `npm run bench:stop`.
+5. Reportar: qué se validó, qué no, datos tocados, datos restaurados, artifacts.
 
-## Reglas / convenciones
+## [STOP] — Code para y pregunta a Mauri
 
-- **No romper la coincidencia con el Excel.** Tras cualquier cambio en `src/engine/calc.ts`
-  correr `scripts/validate.ts`: los 18 valores deben seguir coincidiendo.
-- Los porcentajes se guardan como fracción (0–1) internamente; en el form se editan como %.
-- La UI y los textos están en español (productores rurales). Paleta ruralista en `styles.css`.
-- Gráficos con Recharts; usar `isAnimationActive={false}` (se recalculan en tiempo real).
+Code se detiene y espera decisión cuando el cambio toca:
+- **El motor de cálculo** (`src/engine/`): cualquier cambio que mueva un número
+  que hoy coincide con el Excel. Es el corazón validado de la app.
+- **El formato de persistencia**: la clave o el esquema de
+  `localStorage` (`ganadero_escenarios_v1`). Romperlo invalida escenarios
+  guardados del usuario.
+- **Algo visible al usuario** donde el criterio es subjetivo (UX, diseño).
+- **Una regresión que Code no sabe explicar.**
 
-## Empaquetado para compartir
+Al parar: reportar qué decisión hace falta, las opciones con consecuencias y
+una recomendación tentativa con motivo.
 
-- `npm run build:single` → un único `dist-single/index.html` autocontenido (abre con doble
-  clic, offline). Es la base de la "App de Escritorio".
-- `npm run build` → carpeta `dist/` (PWA instalable: manifest + service worker + íconos),
-  pensada para publicar online (ej: Netlify Drop).
+## Reglas núcleo
+
+- No modificar tests/acceptance para que pase la implementación.
+- Debug por diagnóstico: hipótesis de causa raíz antes de cambiar.
+- Workspace limpio al parar: build verde o marcado roto, sin ediciones a medias.
+- Un concern por commit. Build verde antes de commitear.
+- Cuando un cambio toca el motor de cálculo o el formato de persistencia,
+  pedir review a `codex-bridge` antes de commitear.
+
+## Auditoría con ChatGPT/Codex (codex-bridge)
+
+Llamar al auditor cuando el cambio toca el motor de cálculo, la persistencia,
+firmas públicas, o al cerrar un bloque de trabajo de más de un archivo.
+NO en cada fix chico, refactor local o cambio solo-docs. Actitud crítica de
+los dos lados: Code no le cree todo al auditor ni viceversa.
+
+## Definition of Done
+
+Una fase está DONE solo si:
+- `npm run build` verde + `validate.ts` exit 0.
+- Si tocó UI / persistencia / gráficos: [BROWSER-BENCH] ejecutado (o
+  [BROWSER-HUMAN] pendiente marcado con motivo), con artifacts reportados.
+- Si se tocó `localStorage` real: restaurado y reportado.
+- Docs actualizados si cambia comportamiento observable.
+- Working tree limpio.
