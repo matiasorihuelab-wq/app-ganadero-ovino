@@ -73,7 +73,13 @@ const commit = () => {
 if (cmd === 'start') {
   const stale = pidsOnPort(PORT)
   if (stale.length) {
-    console.log('Matando proceso(s) stale en :' + PORT + ' ->', stale.join(', '))
+    // A propósito: el bench EXIGE el puerto para garantizar que corre contra el
+    // commit actual, así que mata lo que sea que esté en :PORT (no distingue si
+    // es un bench viejo o un proceso ajeno). El aviso lo deja explícito.
+    console.warn(
+      `⚠ :${PORT} ocupado por PID(s) ${stale.join(', ')}. El bench los va a TERMINAR ` +
+        `(taskkill /F) para tomar el puerto. Si era un proceso que te importaba, cancelá ahora.`,
+    )
     killPids(stale)
   }
   const log = openSync('.bench_app.log', 'w')

@@ -2,7 +2,7 @@
   "mcpServers": {
     "codex-bridge": {
       "command": "npx",
-      "args": ["-y", "codex-claude-bridge@latest"],
+      "args": ["-y", "codex-claude-bridge@1.0.0"],
       "env": {}
     }
   }
