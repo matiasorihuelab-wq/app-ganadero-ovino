@@ -1,0 +1,39 @@
+name: CI
+
+# Corre en cada push y en cada Pull Request. La concurrency cancela corridas
+# viejas de la misma ref para no desperdiciar minutos cuando se pushea seguido.
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: lint · typecheck · build · validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Node 24: validate.ts se corre con --experimental-strip-types.
+          node-version: '24'
+          cache: npm
+
+      - name: Install (npm ci)
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Validate engine vs Excel (18/18)
+        run: npm run validate
