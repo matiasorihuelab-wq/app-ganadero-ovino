@@ -1,12 +1,12 @@
 import {
   PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, CartesianGrid,
 } from 'recharts'
-import type { Inputs, Resultados } from '../engine/types'
+import type { Resultados } from '../engine/types'
 import { fmtUSD, fmtNum, fmtPct } from '../utils/format'
 
 const COLORS = ['#2d5016', '#8b7355', '#4a90e2', '#e0a800', '#27ae60', '#a0522d', '#7b68ee']
 
-export default function ResultadosPanel({ inp, r }: { inp: Inputs; r: Resultados }) {
+export default function ResultadosPanel({ r }: { r: Resultados }) {
   const signo = (n: number) => (n >= 0 ? 'pos' : 'neg')
 
   const ingresoData = [
@@ -76,7 +76,7 @@ export default function ResultadosPanel({ inp, r }: { inp: Inputs; r: Resultados
           <h4>Composición de Ingresos</h4>
           <ResponsiveContainer width="100%" height={210}>
             <PieChart>
-              <Pie data={ingresoData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} isAnimationActive={false} label={(e: any) => `${e.name} ${(e.percent * 100).toFixed(0)}%`}>
+              <Pie data={ingresoData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} isAnimationActive={false} label={(e: { name: string; percent: number }) => `${e.name} ${(e.percent * 100).toFixed(0)}%`}>
                 {ingresoData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
               </Pie>
               <Tooltip formatter={(v: number) => fmtUSD(v)} />

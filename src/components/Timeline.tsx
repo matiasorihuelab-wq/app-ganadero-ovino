@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import {
-  ComposedChart, Bar, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine, Legend, Cell,
+  ComposedChart, Bar, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine, Legend,
 } from 'recharts'
 import type { Inputs, Resultados } from '../engine/types'
 import { construirTimeline } from '../engine/timeline'

@@ -65,7 +65,7 @@ export default function App() {
               ))}
             </div>
           )}
-          {vista === 'dashboard' && <ResultadosPanel inp={inp} r={r} />}
+          {vista === 'dashboard' && <ResultadosPanel r={r} />}
           {vista === 'timeline' && <Timeline inp={inp} r={r} />}
           {vista === 'neb' && <Neb inp={inp} r={r} />}
         </div>
