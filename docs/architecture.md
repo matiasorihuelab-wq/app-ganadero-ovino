@@ -65,12 +65,18 @@ Utilidades de presentación en `src/utils/`: `format` (números/monedas), `valid
 Hoy el estado de trabajo vive en memoria (React) y los **escenarios guardados** se
 persisten en `localStorage` (clave `ganadero_escenarios_v1`).
 
-**Frontera objetivo de esta etapa:** la persistencia se aísla detrás de un **puerto**
+**Frontera (implementada):** la persistencia está aislada detrás de un **puerto**
 (interfaz) `EscenarioRepository`, con un **adapter** sobre `localStorage` como única
-implementación, de modo que la UI dependa de la interfaz y no de `localStorage`
-directamente. Este desacople se introduce en estas fundaciones; ver
-[ADR-0002](./adr/0002-storage-abstraction.md). El detalle de implementación
-(`src/persistence/`) se documenta al concretarlo.
+implementación. La UI depende de la interfaz, no de `localStorage` directamente. Ver
+[ADR-0002](./adr/0002-storage-abstraction.md). Estructura en `src/persistence/`:
+
+- `escenario-repository.ts` — el **puerto** `EscenarioRepository` (`listar` / `guardar`
+  / `eliminar`) y el tipo `Escenario`.
+- `local-storage-escenario-repository.ts` — el **adapter** sobre la Web Storage API;
+  único código que toca `localStorage`. Recibe el `Storage` por parámetro (inyectable,
+  testeable).
+- `index.ts` — **composition root**: el singleton `escenarioRepository` que usa la app.
+  Migrar a otra implementación es cambiar solo esta línea.
 
 **Contrato de datos:** un `Escenario` es `{ id, nombre, fecha, inputs }`. La clave y el
 esquema de `localStorage` son **compatibilidad hacia atrás**: romperlos invalidaría

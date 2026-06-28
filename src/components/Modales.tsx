@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Inputs } from '../engine/types'
 import { calcular } from '../engine/calc'
-import { listarEscenarios, guardarEscenario, eliminarEscenario, type Escenario } from '../utils/scenarios'
+import { escenarioRepository, type Escenario } from '../persistence'
 import { fmtUSD, fmtNum } from '../utils/format'
 
 export function ModalGuardar({ inp, onClose }: { inp: Inputs; onClose: () => void }) {
@@ -15,14 +15,14 @@ export function ModalGuardar({ inp, onClose }: { inp: Inputs; onClose: () => voi
       </div>
       <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}>
         <button className="btn-ghost" onClick={onClose}>Cancelar</button>
-        <button className="btn-pri" disabled={!nombre.trim()} onClick={() => { guardarEscenario(nombre.trim(), inp); onClose() }}>Guardar</button>
+        <button className="btn-pri" disabled={!nombre.trim()} onClick={() => { escenarioRepository.guardar(nombre.trim(), inp); onClose() }}>Guardar</button>
       </div>
     </Backdrop>
   )
 }
 
 export function ModalCargar({ onClose, onLoad }: { onClose: () => void; onLoad: (inp: Inputs) => void }) {
-  const [lista, setLista] = useState<Escenario[]>(listarEscenarios())
+  const [lista, setLista] = useState<Escenario[]>(escenarioRepository.listar())
   return (
     <Backdrop onClose={onClose}>
       <h2>📂 Cargar escenario</h2>
@@ -33,7 +33,7 @@ export function ModalCargar({ onClose, onLoad }: { onClose: () => void; onLoad: 
           <div className="scn-row" key={e.id}>
             <div className="nm">{e.nombre}<div className="mt">{e.fecha} · MN {fmtUSD(r.margenNeto, 0)}</div></div>
             <button className="btn-pri" onClick={() => { onLoad(e.inputs); onClose() }}>Cargar</button>
-            <button className="btn-danger" onClick={() => { eliminarEscenario(e.id); setLista(listarEscenarios()) }}>Eliminar</button>
+            <button className="btn-danger" onClick={() => { escenarioRepository.eliminar(e.id); setLista(escenarioRepository.listar()) }}>Eliminar</button>
           </div>
         )
       })}
@@ -45,7 +45,7 @@ export function ModalCargar({ onClose, onLoad }: { onClose: () => void; onLoad: 
 }
 
 export function ModalComparar({ actual, onClose }: { actual: Inputs; onClose: () => void }) {
-  const lista = listarEscenarios()
+  const lista = escenarioRepository.listar()
   const [bId, setBId] = useState(lista[0]?.id || '')
   const b = lista.find((e) => e.id === bId)
   const rA = calcular(actual)
