@@ -21,11 +21,15 @@ export function NumberField({ label, value, onChange, hint, step, pct, suffix }:
       <input
         className="num-input"
         type="number"
+        min={0}
         step={step ?? (pct ? 1 : 'any')}
         value={Number.isFinite(shown) ? shown : 0}
         onChange={(e) => {
-          const raw = e.target.value === '' ? 0 : parseFloat(e.target.value)
-          onChange(pct ? raw / 100 : raw)
+          // Todos los campos del modelo son no-negativos: se descarta NaN y se
+          // recortan negativos a 0 para no producir cantidades/UG negativas. (M7)
+          const raw = parseFloat(e.target.value)
+          const safe = Number.isFinite(raw) ? Math.max(0, raw) : 0
+          onChange(pct ? safe / 100 : safe)
         }}
       />
     </div>
