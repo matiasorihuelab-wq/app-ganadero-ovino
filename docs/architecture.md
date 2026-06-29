@@ -75,13 +75,18 @@ implementación. La UI depende de la interfaz, no de `localStorage` directamente
 - `local-storage-escenario-repository.ts` — el **adapter** sobre la Web Storage API;
   único código que toca `localStorage`. Recibe el `Storage` por parámetro (inyectable,
   testeable).
-- `index.ts` — **composition root**: el singleton `escenarioRepository` que usa la app.
-  Migrar a otra implementación es cambiar solo esta línea.
+- `draft-repository.ts` — segundo **puerto** `BorradorRepository` (`cargar` / `guardar`
+  / `limpiar`) y su adapter, para el **borrador en curso** (autoguardado, clave
+  `ganadero_borrador_v1`), independiente de los escenarios con nombre.
+- `index.ts` — **composition root**: los singletons `escenarioRepository` y
+  `borradorRepository` que usa la app. Migrar a otra implementación es cambiar solo acá.
 
-**Contrato de datos:** un `Escenario` es `{ id, nombre, fecha, inputs }`. La clave y el
-esquema de `localStorage` son **compatibilidad hacia atrás**: romperlos invalidaría
-escenarios ya guardados por usuarios. Cualquier cambio de formato requiere una
-estrategia de migración y su ADR.
+**Contrato de datos:** un `Escenario` es `{ id, nombre, fecha, inputs }`. Las claves
+(`ganadero_escenarios_v1`, `ganadero_borrador_v1`) y el esquema son **compatibilidad
+hacia atrás**: romperlos invalidaría datos guardados. Al cargar, `sanitizeInputs()`
+(en `presets.ts`) mergea sobre el preset vacío y garantiza invariantes (p. ej.
+`medicamentos` array), tolerando esquemas viejos; un cambio de formato mayor requiere
+una estrategia de migración y su ADR.
 
 ### 4. Futura integración con backend (no implementada)
 
@@ -110,9 +115,12 @@ El cálculo es **síncrono y en tiempo real**: cada cambio en `Inputs` recalcula
 ## Calidad y verificación
 
 - **CI** (`.github/workflows/ci.yml`): en cada push y PR corre `lint → typecheck →
-  build → validate`.
+  test → build → validate`.
+- **`test`** — suite Vitest del motor y sus módulos (`calc`, `timeline`, `neb`), de
+  `validaciones`, de `sanitizeInputs` y de los adapters de persistencia (con un
+  `Storage` en memoria, gracias a la inyección del puerto).
 - **`validate`** compara el motor contra el Excel de referencia (18/18, < 1e-6).
-- **Definición de "build verde":** los cuatro pasos anteriores en verde.
+- **Definición de "build verde":** los cinco pasos anteriores en verde.
 
 ## Limitaciones conocidas y deuda técnica
 
@@ -121,9 +129,9 @@ El cálculo es **síncrono y en tiempo real**: cada cambio en `Inputs` recalcula
   (`dist/`, que no incluye Vite/esbuild). El fix obliga a **Vite 5 → 8** (cambio mayor
   con breaking changes). Se difiere a un **PR dedicado de upgrade de Vite** con su
   propia validación; no se mezcla con trabajo de fundaciones.
-- **Sin cobertura de tests de UI/persistencia.** Hoy solo el motor tiene validación
-  automatizada (`validate.ts`). Incorporar tests (p. ej. Vitest) sobre la persistencia
-  y los componentes es una fundación pendiente priorizada.
+- **Cobertura de tests parcial.** El motor (`calc`/`timeline`/`neb`), `validaciones`,
+  `sanitizeInputs` y la persistencia tienen tests; **falta cobertura de componentes**
+  de UI (hoy verificados por browser-bench manual). Ampliarla es deuda priorizada.
 - **Persistencia client-only.** Adecuada para la etapa actual; su evolución a backend
   está prevista detrás del puerto `EscenarioRepository` (ver punto 4).
 
@@ -131,12 +139,12 @@ El cálculo es **síncrono y en tiempo real**: cada cambio en `Inputs` recalcula
 
 ```
 src/
-  engine/        # núcleo de cálculo (TS puro, sin UI)
-  components/    # UI React
-  persistence/   # puerto EscenarioRepository + adapter localStorage
+  engine/        # núcleo de cálculo (TS puro, sin UI) + tests *.test.ts
+  components/    # UI React (incluye ErrorBoundary)
+  persistence/   # puertos EscenarioRepository + BorradorRepository + adapters
   utils/         # presentación: format, validaciones, exportar
   App.tsx, main.tsx, styles.css
 scripts/         # validate.ts (motor vs Excel), gen-icons.mjs
-docs/            # vision.md, architecture.md, adr/
+docs/            # vision.md, architecture.md, distribucion.md, v1-backlog.md, adr/
 .github/workflows/ci.yml
 ```
