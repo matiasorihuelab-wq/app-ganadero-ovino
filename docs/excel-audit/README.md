@@ -41,7 +41,10 @@ diferencias, decidir si se ajusta la app o el Excel, y dejar registro.
   comparación de cada caso.
 - [`referencia/`](referencia/) — acá va el Excel de referencia (todavía no incorporado).
 
-## Regla durante la beta
+## Reglas
 
-Hasta que empiece esta auditoría, **no se modifica ninguna fórmula del motor**. Las
-dudas se documentan, no se "corrigen" por suposición.
+El motor está **congelado** (ver [../BASELINE_RC1.md](../BASELINE_RC1.md)). Toda
+modificación durante la auditoría sigue la **política de cambios**
+([../CHANGE_POLICY.md](../CHANGE_POLICY.md)): con evidencia del Excel, documentada, y con
+los tests como red. Hasta entonces, las dudas se documentan (no se "corrigen" por
+suposición).
