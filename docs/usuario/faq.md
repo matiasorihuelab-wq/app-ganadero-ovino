@@ -32,7 +32,7 @@ Probablemente falte un dato clave (ovejas, precios, micronaje, superficie). Mir�
 Botón **📥 PDF** → se abre el diálogo de impresión → elegí **"Guardar como PDF"**.
 
 **¿Los números son definitivos?**
-Esta es una versión **RC2**: el motor de cálculo todavía se va a **validar contra el
+Esta es una versión **RC3** (beta): el motor de cálculo todavía se va a **validar contra el
 Excel** de referencia. Algunos valores podrían ajustarse. Ver
 [limitaciones](limitaciones.md).
 

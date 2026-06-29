@@ -112,8 +112,8 @@ El botón **🐞 Reportar o sugerir** abre un formulario externo. Para dejarlo o
 
 1. **Crear el formulario** (lo más simple: Google Forms, gratis) con estos campos
    (**no pedir institución**):
-   - Nombre · Correo electrónico · Teléfono (opcional)
    - **Tipo de reporte:** Error / Sugerencia / Mejora *(opción única)*
+   - Nombre · Correo electrónico · Teléfono (opcional) · Fecha
    - ¿Qué estabas intentando hacer? · ¿Qué ocurrió? · ¿Qué esperabas que ocurriera?
    - ¿Se puede repetir? (Siempre / A veces / Una sola vez / No sé)
    - Navegador (Chrome / Edge / Firefox / Safari / Otro)

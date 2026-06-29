@@ -1,9 +1,9 @@
-# Guía de Beta — App de Rentabilidad Ovina (Beta · RC2)
+# Guía de Beta — App de Rentabilidad Ovina (Beta · RC3)
 
 ¡Gracias por probar la aplicación! Sos parte de un grupo reducido que nos ayuda a
 dejarla lista. Esta guía te dice **qué probar** y **cómo avisarnos** si algo no anda.
 
-> **Importante:** esta es una versión de prueba (**Release Candidate RC2**, beta cerrada). El motor de
+> **Importante:** esta es una versión de prueba (**RC3**, beta cerrada). El motor de
 > cálculo todavía **se va a validar contra el Excel de referencia**, así que algunos
 > números podrían ajustarse más adelante. Tu objetivo en esta beta es probar que la
 > **aplicación funcione y sea clara**, más que verificar la exactitud final de las cifras

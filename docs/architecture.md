@@ -161,7 +161,8 @@ src/
   App.tsx, main.tsx, styles.css, version.ts, bug-report.ts
 scripts/         # validate.ts (motor vs Excel), package-release.mjs, gen-icons.mjs
 docs/            # vision, architecture, distribucion, v1-backlog, production-review,
-                 # BASELINE_RC1, CHANGE_POLICY, nutricion/, adr/, usuario/, excel-audit/
+                 # BASELINE_RC1, CHANGE_POLICY, nutricion/, adr/, usuario/, excel-audit/,
+                 # DEPLOY_GITHUB_PAGES, BETA_READY, CONTINUACION_CHATGPT
 release/         # (generado por npm run package) paquete de distribución, gitignored
 .github/workflows/ci.yml
 ```

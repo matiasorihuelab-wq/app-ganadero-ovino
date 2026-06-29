@@ -2,7 +2,27 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 
-## [1.0.0-rc.2] — 2026-06-29 — Beta cerrada (RC2)
+## [1.0.0-rc.3] — 2026-06-29 — Beta cerrada (RC3) — build para SUL
+
+Build de la **beta cerrada** con técnicos del SUL: la app queda lista para compartir por
+un enlace público. **Sin cambios funcionales** en el motor económico (congelado, 18/18) ni
+en el módulo nutricional (congelado "🚧 En construcción"). Trabajo de preparación,
+documentación y empaquetado.
+
+### Beta — preparación final
+- **Módulo nutricional** confirmado como **🚧 En construcción**, con texto que aclara que
+  se incorporará en una **futura versión** usando tablas oficiales (NRC, INRA, AFRC, etc.).
+  No se agregó lógica, cálculos, tablas, providers ni arquitectura.
+- **Sistema de reporte terminado:** botón **🐞 Reportar o sugerir** (Error / Sugerencia /
+  Mejora) + **📋 Copiar diagnóstico**. Formulario especificado (incluye *Tipo de reporte*
+  y *Fecha*; sin institución) y documentado.
+- **Revisión integral de beta** (UX, textos, responsive, impresión, exportaciones,
+  persistencia, offline, GitHub Pages) — ver `docs/BETA_READY.md`.
+- Documentación nueva: **`docs/BETA_READY.md`** (cómo publicar/distribuir) y
+  **`docs/CONTINUACION_CHATGPT.md`** (traspaso completo de contexto).
+- `release/`, `VERSION` y `CHANGELOG` regenerados como **RC3 / Beta cerrada**.
+
+## [1.0.0-rc.2] — 2026-06-29 — Release Candidate (RC2)
 
 Build de la **beta cerrada** con técnicos del SUL. Incluye el rediseño del **módulo
 nutricional** y la preparación de la **distribución**. El **motor económico permanece
@@ -34,7 +54,7 @@ intacto** (validado 18/18 contra el Excel).
 - Contratos **futuros** (solo tipos, sin lógica) para el **análisis químico del forraje**
   (`forraje/`) y el **balance** oferta vs requerimiento (`balance/`).
 - Documentación: `docs/nutricion/` (objetivo, arquitectura, flujo, providers, cómo cargar
-  tablas) y `docs/CONTINUACION_PROYECTO.md`.
+  tablas) y el documento de traspaso de contexto.
 
 ### Eliminado
 - Todo el modelo NEB propio: mantenimiento `PV^0,75`, coeficientes editables, ajuste por

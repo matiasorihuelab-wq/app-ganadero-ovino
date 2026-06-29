@@ -22,13 +22,14 @@ No incluye ningún dato personal.
 - **Correo electrónico**
 - **Teléfono** (opcional)
 - **Tipo de reporte:** Error / Sugerencia / Mejora
+- **Fecha**
 - **¿Qué estabas intentando hacer?**
 - **¿Qué ocurrió?**
 - **¿Qué esperabas que ocurriera?**
 - **¿Se puede repetir?** (Siempre / A veces / Una sola vez / No sé)
 - **Navegador** (Chrome / Edge / Firefox / Safari / Otro)
 - **Sistema operativo** (Windows / Android / iPhone-iPad / Mac / Linux / Otro)
-- **Versión de la aplicación** (aparece arriba a la derecha, junto al título — hoy **RC2**)
+- **Versión de la aplicación** (aparece arriba a la derecha, junto al título — hoy **RC3**)
 - **Captura de pantalla** (adjuntar, si podés)
 
 > No te pedimos tu institución ni ningún dato más del necesario.

@@ -12,12 +12,13 @@ detallada (sanidad por medicamento, esquila, alimentación, comercialización) y
 finales. Hoy coincide con el Excel en **18 valores del escenario de ejemplo**; la
 **auditoría de fidelidad completa** (todas las categorías) está pendiente.
 
-> **Estado: Release Candidate (RC2).** El **motor económico** sigue siendo la **baseline
-> RC1 congelada** (validado 18/18 contra el Excel; su auditoría completa queda pendiente).
-> RC2 reorganiza el **módulo nutricional** como motor de consulta de requerimientos
-> oficiales (ver [docs/nutricion/](docs/nutricion/)). Antes de cualquier cambio del motor
-> económico, leé [docs/BASELINE_RC1.md](docs/BASELINE_RC1.md) y
-> [docs/CHANGE_POLICY.md](docs/CHANGE_POLICY.md).
+> **Estado: RC3 — Beta cerrada.** Build preparado para una **beta cerrada** con técnicos
+> del SUL. El **motor económico** sigue siendo la **baseline RC1 congelada** (validado
+> 18/18 contra el Excel; su auditoría completa queda pendiente). El **módulo de
+> Requerimientos Nutricionales** está **🚧 en construcción** (se incorporará en una futura
+> versión con tablas oficiales). Antes de cualquier cambio del motor económico, leé
+> [docs/BASELINE_RC1.md](docs/BASELINE_RC1.md) y [docs/CHANGE_POLICY.md](docs/CHANGE_POLICY.md).
+> Para publicar/distribuir la beta, ver [docs/BETA_READY.md](docs/BETA_READY.md).
 
 ## Cómo correr
 
@@ -95,7 +96,7 @@ src/
     format.ts        # formato USD / números / %
     validaciones.ts  # avisos y advertencias
     exportar.ts      # exportar CSV / PDF (print)
-  version.ts         # versión visible de la app (RC2)
+  version.ts         # versión visible de la app (RC3)
 docs/                # vision, architecture, distribucion, v1-backlog, production-review,
                      # BASELINE_RC1, CHANGE_POLICY, adr/, usuario/ (manual), excel-audit/
 ```

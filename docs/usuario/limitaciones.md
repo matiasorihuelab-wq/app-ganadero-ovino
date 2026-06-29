@@ -1,4 +1,4 @@
-# Limitaciones conocidas (RC2 · Beta)
+# Limitaciones conocidas (RC3 · Beta)
 
 Esta versión es un **Release Candidate** para una beta cerrada. Es funcional y estable,
 pero conviene tener presente lo siguiente.
