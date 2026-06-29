@@ -12,10 +12,12 @@ detallada (sanidad por medicamento, esquila, alimentación, comercialización) y
 finales. Hoy coincide con el Excel en **18 valores del escenario de ejemplo**; la
 **auditoría de fidelidad completa** (todas las categorías) está pendiente.
 
-> **Estado: Release Candidate (RC1) — baseline congelada.** El software está estabilizado
-> y la arquitectura congelada. El único trabajo pendiente es la **auditoría del motor
-> contra el Excel oficial**. Antes de cualquier cambio del motor, leé
-> [docs/BASELINE_RC1.md](docs/BASELINE_RC1.md) y [docs/CHANGE_POLICY.md](docs/CHANGE_POLICY.md).
+> **Estado: Release Candidate (RC2).** El **motor económico** sigue siendo la **baseline
+> RC1 congelada** (validado 18/18 contra el Excel; su auditoría completa queda pendiente).
+> RC2 reorganiza el **módulo nutricional** como motor de consulta de requerimientos
+> oficiales (ver [docs/nutricion/](docs/nutricion/)). Antes de cualquier cambio del motor
+> económico, leé [docs/BASELINE_RC1.md](docs/BASELINE_RC1.md) y
+> [docs/CHANGE_POLICY.md](docs/CHANGE_POLICY.md).
 
 ## Cómo correr
 
@@ -116,10 +118,11 @@ docs/                # vision, architecture, distribucion, v1-backlog, productio
   costos fijos / mano de obra se prorratean. La **suma anual reconcilia exactamente** con
   el margen neto del dashboard. Incluye gráfico de barras + línea de cash flow acumulado.
   Motor: `src/engine/timeline.ts`.
-- **🥗 Requerimientos nutricionales:** consulta los requerimientos **oficiales** (NRC y,
-  a futuro, INRA/AFRC/CSIRO) de una categoría/estado/peso y calcula los kg de materia
-  seca que necesita el rodeo, balanceando contra la EM del forraje. **No usa un modelo
-  propio**: consulta tablas auditables vía un *Requirement Provider*. Ver
+- **🥗 Requerimientos nutricionales:** **motor de consulta** de requerimientos
+  **oficiales** (NRC y, a futuro, INRA/AFRC/CSIRO) según categoría, estado fisiológico,
+  peso vivo y nivel productivo. **No calcula ni modela**: consulta tablas auditables vía
+  un *Requirement Provider*. El análisis químico del forraje y el balance oferta vs
+  requerimiento son etapas futuras (arquitectura ya preparada). Ver
   [docs/nutricion/](docs/nutricion/). Módulo: `src/nutrition/`, UI `src/components/Nutricion.tsx`.
 
 ## Notas sobre el modelo

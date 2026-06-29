@@ -1,89 +1,115 @@
 # Módulo de Requerimientos Nutricionales
 
-> Reemplaza al antiguo "Análisis Energético (NEB)". Cambio **conceptual**, no un
-> arreglo de software. El motor económico permanece **congelado** (RC1); este cambio es
-> exclusivo del módulo nutricional.
+> Reemplaza al antiguo "Análisis Energético (NEB)". La app **no calcula** requerimientos:
+> los **consulta** desde tablas oficiales. El motor económico permanece **congelado**;
+> este módulo es independiente y aislado.
 
-## Por qué se eliminó el modelo energético anterior
+## Objetivo
 
-La implementación anterior desarrolló un **modelo energético propio**: mantenimiento por
-`PV^0,75`, coeficientes editables, ajuste por frío, temperatura ambiental y crítica,
-condición corporal objetivo y ganancia diaria esperada. Aunque era correcto como
-software, **no representaba el objetivo científico del proyecto**: convertía a la app en
-un **simulador metabólico** con ecuaciones propias.
+Que la aplicación pueda responder, **consultando tablas oficiales** (NRC inicialmente; en
+el futuro INRA, AFRC, CSIRO…), preguntas como:
 
-El objetivo del proyecto no es construir un modelo propio, sino una **herramienta de
-consulta** de información técnica **oficial y auditable**.
+> *"Una oveja de 55 kg en gestación final necesita: tanta energía metabolizable, tanta
+> proteína, tanto consumo esperado, tanto calcio, tanto fósforo, etc."*
 
-## Por qué se usan tablas oficiales
+Esos valores provienen del **NRC, no del código**. No hay modelo propio, ni coeficientes
+inventados, ni simulación fisiológica.
 
-La app debe responder una sola pregunta:
+## Principio
 
-> *"¿Cuántos kg de materia seca necesita consumir diariamente este rodeo según los
-> requerimientos nutricionales oficiales?"*
+- La app **consulta** requerimientos oficiales.
+- Después (etapa futura) los **compara** contra la **oferta** del forraje (análisis
+  químico) y genera el **balance** (energía, proteína, minerales; deficiencias, excesos,
+  nutrientes limitantes, recomendaciones).
 
-No estima, no modela, no ajusta, no inventa ecuaciones: **consulta tablas técnicas**
-(NRC y, en el futuro, INRA / AFRC / CSIRO). Cada valor tiene **referencia bibliográfica**.
+## El requerimiento depende de varias variables
 
-### Ventajas del nuevo enfoque
+No solo del peso vivo. Depende de:
 
-- **Auditable y trazable:** cada número proviene de una fuente citada, no de una ecuación
-  propia. Apto para decisiones técnicas y para revisión científica.
-- **Simple:** la interfaz pide solo lo necesario (categoría, estado, peso, cantidad) y
-  consulta; sin parámetros que el usuario deba calibrar.
-- **Intercambiable:** soportar otro sistema (INRA, AFRC, CSIRO) es agregar un provider,
-  sin tocar la interfaz ni el cálculo.
-- **Defendible:** "lo dice el NRC" es más sólido que "lo estima nuestro modelo".
+- **categoría** (Ovejas, Borregas, Carneros)
+- **estado fisiológico** (gestación, lactancia, servicio, mantenimiento…)
+- **peso vivo**
+- **nivel productivo**, *cuando corresponda* (p. ej. nivel de producción de leche)
 
-## Arquitectura (Requirement Provider)
+Cada combinación consulta su fila en la tabla oficial. **Nunca se calcula.**
 
-La UI **nunca** conoce de dónde vienen los datos. Habla con un puerto.
+## Arquitectura (Providers)
+
+La UI nunca conoce la fuente de los datos. Habla con un puerto.
 
 ```
 UI (components/Nutricion.tsx)
-   ↓ usa
-nutrition/calcular.ts            (cálculo puro: consulta + balance, sin modelar)
    ↓ consulta
-NutrientRequirementProvider      (puerto, nutrition/requirements/types.ts)
+NutrientRequirementProvider        (puerto — requirements/types.ts)
    ↓ implementado por
-NRCProvider                      (nutrition/requirements/nrc-provider.ts)
+NRCProvider                        (requirements/nrc-provider.ts)   ← hoy
+INRAProvider / AFRCProvider / …    (futuro, misma interfaz)
    ↓ lee
-TABLA_NRC                        (datos oficiales — hoy VACÍA, solo estructura)
+TABLA_NRC                          (datos oficiales — hoy VACÍA, solo estructura)
 ```
 
-Archivos:
-- `src/nutrition/requirements/types.ts` — tipos de dominio y la interfaz
-  `NutrientRequirementProvider`.
-- `src/nutrition/requirements/categorias.ts` — catálogo de categorías y estados
-  fisiológicos (taxonomía, ampliable).
-- `src/nutrition/requirements/nrc-provider.ts` — provider NRC (estructura de tabla,
-  **sin datos** todavía).
-- `src/nutrition/requirements/index.ts` — composition root: el provider activo.
-- `src/nutrition/calcular.ts` — cálculo puro (consulta + balance contra el forraje).
-- `src/components/Nutricion.tsx` — la interfaz.
+Cambiar de sistema de referencia = un provider nuevo + cambiar **una línea** del
+composition root (`requirements/index.ts`). La UI no cambia.
 
-**Para cambiar de sistema de referencia** (INRA, AFRC, CSIRO): crear
-`createINRAProvider()` (etc.) implementando `NutrientRequirementProvider` y cambiar la
-única línea de `nutrition/requirements/index.ts`. La UI y el cálculo no cambian.
+### Modelo de datos
 
-## Integración con el análisis del forraje
+Todo se apoya en un **catálogo de nutrientes compartido y ampliable**
+(`src/nutrition/nutrientes.ts`): EM, proteína, consumo, calcio, fósforo, magnesio,
+potasio, sodio, azufre, cobre, zinc, manganeso, hierro, molibdeno, selenio, cobalto,
+vitaminas A/D/E… Agregar un nutriente es sumar un id al catálogo; ni la UI ni los
+providers cambian. Un requerimiento es una lista de `ValorNutriente` + su `fuente`.
 
-El cálculo combina el requerimiento (del provider) con la **EM del forraje**:
+### Estructura de archivos
 
 ```
-necesidad   = EM requerida/animal × cantidad
-kg MS req.  = necesidad / EM del forraje
-oferta      = consumo esperado/animal × EM forraje × cantidad
-balance     = oferta − necesidad
+src/nutrition/
+  nutrientes.ts                 # catálogo de nutrientes (compartido, ampliable)
+  requirements/
+    types.ts                    # Categoria, EstadoFisiologico, NivelProductivo,
+                                 #   Consulta, Requerimiento, NutrientRequirementProvider
+    categorias.ts               # taxonomía: categorías + estados fisiológicos
+    nrc-provider.ts             # NRCProvider (estructura de tabla, SIN datos todavía)
+    index.ts                    # composition root: provider activo
+    provider.test.ts            # tests de arquitectura
+  forraje/
+    types.ts                    # AnalisisForraje (OFERTA) — FUTURO, solo contrato
+  balance/
+    types.ts                    # BalanceNutricional + ComparadorNutricional — FUTURO, solo contrato
+src/components/Nutricion.tsx    # UI de consulta
 ```
 
-> **Nota (estado del proyecto):** al hacer este cambio **no existía** en la app un
-> análisis químico del forraje compartido (EM/PB/FDN/FDA). Por eso el módulo recoge esos
-> valores en su propia sección "Análisis del forraje", **detrás del mismo seam** de datos.
-> Si más adelante se incorpora un análisis de forraje a nivel app, el módulo lo consume
-> desde ahí **sin duplicar** ni cambiar la UI. Hoy el cálculo usa solo **EM**; PB/FDN/FDA
-> se recogen como estructura para ampliaciones futuras.
+## Flujo
 
-## Cómo incorporar las tablas y actualizar versiones
+```
+Usuario elige categoría → estado fisiológico → (nivel productivo si corresponde) → peso vivo
+   ↓
+La UI consulta el Provider
+   ↓
+El Provider busca en la tabla oficial la fila correspondiente
+   ↓
+Devuelve el requerimiento multi-nutriente (o null si aún no hay dato)
+   ↓
+La UI lo muestra, citando la fuente
+```
 
-Ver [cargar-requerimientos.md](cargar-requerimientos.md).
+## Integración futura con el análisis químico del forraje
+
+El **análisis químico de la pastura** (oferta nutricional) será un módulo aparte que
+cargará MS, PB, FDN, FDA, EM, digestibilidad, minerales (Ca, P, Mg, K, Na, S, Cu, Zn, Mn,
+Fe, Mo, Se, Co), vitaminas (A, D, E)… usando el **mismo catálogo de nutrientes**. Su
+contrato de datos ya existe (`forraje/types.ts`), **sin desarrollarse todavía**.
+
+## Integración futura con el balance y la suplementación
+
+Con la oferta (forraje) y el requerimiento (tabla), un **comparador** producirá el
+**balance** por nutriente (déficit / adecuado / exceso), los **nutrientes limitantes** y
+las **recomendaciones** (incluida la futura **suplementación**). El contrato ya existe
+(`balance/types.ts`), **sin lógica todavía** (no hay fórmulas propias: el balance es una
+comparación directa oferta vs requerimiento).
+
+## Estado actual
+
+- ✅ Arquitectura, tipos, interfaces, modelo de datos y UI de consulta: **listos**.
+- ⏳ Tablas oficiales (NRC): **no cargadas** todavía → ver
+  [cargar-requerimientos.md](cargar-requerimientos.md).
+- ⏳ Análisis químico del forraje y balance: **solo contratos** (a desarrollar).

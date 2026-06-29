@@ -37,8 +37,10 @@ node scripts/gen-icons.mjs                             # regenera los íconos PN
   - `presets.ts` — preset vacío (genérico) y preset ejemplo (Merino Australiano para QA).
   - `timeline.ts` — evolución temporal / cash flow mensual (reconcilia con el margen neto).
 - `src/nutrition/` — **Requerimientos Nutricionales** (módulo separado del motor
-  económico): consulta tablas oficiales (NRC…) vía un `NutrientRequirementProvider`. No
-  modela: consulta. Ver `docs/nutricion/`.
+  económico): **motor de consulta** de tablas oficiales (NRC…) vía un
+  `NutrientRequirementProvider`, según categoría/estado/peso/nivel productivo. **No
+  calcula ni modela: consulta.** Catálogo de nutrientes compartido en `nutrientes.ts`;
+  forraje y balance son contratos futuros (`forraje/`, `balance/`). Ver `docs/nutricion/`.
 - `src/components/` — UI: `Formulario`, `Resultados` (dashboard), `Timeline`,
   `Nutricion` (requerimientos), `Modales` (guardar/cargar/comparar escenarios), `Campos`
   (inputs reutilizables), `ErrorBoundary`.

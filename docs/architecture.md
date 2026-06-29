@@ -40,8 +40,10 @@ React ni del navegador. Convierte un objeto de entrada (`Inputs`) en resultados
 - `timeline.ts` — evolución temporal / flujo de caja mensual.
 
 > El módulo de **Requerimientos Nutricionales** vive aparte, en `src/nutrition/` (no es
-> parte del motor económico): consulta tablas oficiales (NRC…) vía un
-> `NutrientRequirementProvider`. Ver `docs/nutricion/`.
+> parte del motor económico). Es un **motor de consulta**: obtiene requerimientos de
+> tablas oficiales (NRC…) vía un `NutrientRequirementProvider` (arquitectura por
+> providers, intercambiable). No calcula ni modela. El análisis del forraje y el balance
+> son contratos futuros (`forraje/`, `balance/`). Ver `docs/nutricion/`.
 
 **Regla dura:** el motor no conoce a la UI ni a la persistencia. Cualquier cambio que
 mueva un número validado contra el Excel se verifica con `npm run validate` (18/18).
