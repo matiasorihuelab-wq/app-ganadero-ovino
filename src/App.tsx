@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { Inputs } from './engine/types'
 import { calcular } from './engine/calc'
 import { INPUTS_VACIO, INPUTS_EJEMPLO } from './engine/presets'
 import { validar } from './utils/validaciones'
 import { exportarCSV, exportarPDF } from './utils/exportar'
+import { borradorRepository } from './persistence'
 import Formulario from './components/Formulario'
 import ResultadosPanel from './components/Resultados'
 import Timeline from './components/Timeline'
@@ -13,10 +14,20 @@ import { ModalGuardar, ModalCargar, ModalComparar } from './components/Modales'
 type ModalActivo = null | 'guardar' | 'cargar' | 'comparar'
 type Vista = 'dashboard' | 'timeline' | 'neb'
 
+// Borrador inicial: lo guardado (mergeado sobre el vacío para tolerar campos que
+// falten en versiones viejas) o el preset vacío. (M3)
+function inicial(): Inputs {
+  const guardado = borradorRepository.cargar()
+  return guardado ? { ...INPUTS_VACIO, ...guardado } : INPUTS_VACIO
+}
+
 export default function App() {
-  const [inp, setInp] = useState<Inputs>(INPUTS_VACIO)
+  const [inp, setInp] = useState<Inputs>(inicial)
   const [modal, setModal] = useState<ModalActivo>(null)
   const [vista, setVista] = useState<Vista>('dashboard')
+
+  // Autoguardado del borrador en curso: no se pierde al recargar o cerrar. (M3)
+  useEffect(() => { borradorRepository.guardar(inp) }, [inp])
 
   const set = (patch: Partial<Inputs>) => setInp((prev) => ({ ...prev, ...patch }))
   const r = useMemo(() => calcular(inp), [inp])
