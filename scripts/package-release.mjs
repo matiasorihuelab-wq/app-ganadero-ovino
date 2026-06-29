@@ -17,7 +17,11 @@ import { rmSync, mkdirSync, cpSync, copyFileSync, writeFileSync, readFileSync, e
 
 const pkg = JSON.parse(readFileSync('package.json', 'utf8'))
 const version = pkg.version
-const estado = 'Release Candidate (RC1)'
+// El label (RC1, RC2, …) se deriva del sufijo -rc.N de la versión, para que el paquete
+// quede siempre en sincronía con package.json / src/version.ts sin editar este script.
+const rcMatch = /-rc\.(\d+)$/.exec(version)
+const label = rcMatch ? `RC${rcMatch[1]}` : version
+const estado = `Release Candidate (${label})`
 const fecha = new Date().toISOString().slice(0, 10)
 const commit = (() => {
   try { return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim() } catch { return '(desconocido)' }
@@ -42,7 +46,7 @@ if (existsSync('CHANGELOG.md')) copyFileSync('CHANGELOG.md', 'release/CHANGELOG.
 // 3) Metadatos (también se escribe el VERSION de la raíz)
 const versionTxt = [
   `version: ${version}`,
-  `label: RC1`,
+  `label: ${label}`,
   `estado: ${estado}`,
   `fecha: ${fecha}`,
   `commit: ${commit}`,

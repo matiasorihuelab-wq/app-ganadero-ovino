@@ -2,6 +2,36 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 
+## [1.0.0-rc.2] — 2026-06-29 — Release Candidate (RC2)
+
+Rediseño del **módulo nutricional**. El **motor económico permanece intacto** (validado
+18/18 contra el Excel); el cambio está **aislado** en `src/nutrition/`.
+
+### Cambiado
+- El módulo nutricional pasa de un **modelo energético propio (NEB)** a un **motor de
+  consulta de requerimientos oficiales** (NRC y, a futuro, INRA/AFRC/CSIRO). La app **no
+  calcula ni modela**: consulta tablas auditables según **categoría, estado fisiológico,
+  peso vivo y nivel productivo**.
+- La pestaña "🔥 Energético" pasó a "🥗 Requerimientos".
+
+### Agregado
+- Arquitectura por **providers** (`NutrientRequirementProvider` → `NRCProvider`),
+  intercambiable sin tocar la UI.
+- **Catálogo de nutrientes** compartido y ampliable (`src/nutrition/nutrientes.ts`):
+  energía, proteína, consumo, minerales mayores y traza, vitaminas.
+- Contratos **futuros** (solo tipos, sin lógica) para el **análisis químico del forraje**
+  (`forraje/`) y el **balance** oferta vs requerimiento (`balance/`).
+- Documentación: `docs/nutricion/` (objetivo, arquitectura, flujo, providers, cómo cargar
+  tablas) y `docs/CONTINUACION_PROYECTO.md`.
+
+### Eliminado
+- Todo el modelo NEB propio: mantenimiento `PV^0,75`, coeficientes editables, ajuste por
+  frío, temperatura, condición corporal, ganancia diaria, parámetros del modelo.
+
+### Pendiente (no incluido en esta etapa, por diseño)
+- Cargar las **tablas oficiales NRC** (hoy la estructura está vacía a propósito).
+- Desarrollar el **análisis químico del forraje** y el **balance** nutricional.
+
 ## [1.0.0-rc.1] — 2026-06-29 — Release Candidate (RC1)
 
 Primer **Release Candidate**, listo para una **beta cerrada** con usuarios reales.
