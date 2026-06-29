@@ -51,16 +51,17 @@ export function ModalComparar({ actual, onClose }: { actual: Inputs; onClose: ()
   const rA = calcular(actual)
   const rB = b ? calcular(b.inputs) : null
 
-  const filas: [string, number, number | null, number][] = rB
+  // [etiqueta, A, B, decimales, esMoneda]
+  const filas: [string, number, number, number, boolean][] = rB
     ? [
-        ['Ingreso bruto', rA.ingresoBruto, rB.ingresoBruto, 0],
-        ['Costos directos', rA.costosDirectosTotal, rB.costosDirectosTotal, 0],
-        ['Costos fijos', rA.costosFijosTotal, rB.costosFijosTotal, 0],
-        ['Margen bruto', rA.margenBruto, rB.margenBruto, 0],
-        ['Margen neto', rA.margenNeto, rB.margenNeto, 0],
-        ['Margen neto / ha', rA.margenNetoHa, rB.margenNetoHa, 1],
-        ['Lana (kg)', rA.totalLanaKg, rB.totalLanaKg, 0],
-        ['Animales', rA.totalAnimales, rB.totalAnimales, 0],
+        ['Ingreso bruto', rA.ingresoBruto, rB.ingresoBruto, 0, true],
+        ['Costos directos', rA.costosDirectosTotal, rB.costosDirectosTotal, 0, true],
+        ['Costos fijos', rA.costosFijosTotal, rB.costosFijosTotal, 0, true],
+        ['Margen bruto', rA.margenBruto, rB.margenBruto, 0, true],
+        ['Margen neto', rA.margenNeto, rB.margenNeto, 0, true],
+        ['Margen neto / ha', rA.margenNetoHa, rB.margenNetoHa, 1, true],
+        ['Lana (kg)', rA.totalLanaKg, rB.totalLanaKg, 0, false],
+        ['Animales', rA.totalAnimales, rB.totalAnimales, 0, false],
       ]
     : []
 
@@ -77,11 +78,12 @@ export function ModalComparar({ actual, onClose }: { actual: Inputs; onClose: ()
       {rB ? (
         <div className="cmp-grid">
           <div className="h">Indicador</div><div className="h">A (actual)</div><div className="h">B</div><div className="h">Δ</div>
-          {filas.map(([lbl, va, vb, dec]) => {
-            const delta = va - (vb as number)
+          {filas.map(([lbl, va, vb, dec, money]) => {
+            const delta = va - vb
             const cls = delta >= 0 ? 'pos' : 'neg'
+            const fmt = (n: number) => (money ? fmtUSD(n, dec) : fmtNum(n, dec))
             return (
-              <Cells key={lbl} lbl={lbl} a={fmtUSD(va, dec)} b={fmtUSD(vb as number, dec)} d={(delta >= 0 ? '+' : '') + fmtNum(delta, dec)} cls={cls} />
+              <Cells key={lbl} lbl={lbl} a={fmt(va)} b={fmt(vb)} d={(delta >= 0 ? '+' : '') + fmtNum(delta, dec)} cls={cls} />
             )
           })}
         </div>
