@@ -39,7 +39,7 @@ export function createLocalStorageEscenarioRepository(
 
     guardar(nombre: string, inputs: Inputs): Escenario {
       const lista = leer()
-      const id = 'scn_' + Math.random().toString(36).slice(2, 9)
+      const id = 'scn_' + crypto.randomUUID()
       const escenario: Escenario = { id, nombre, fecha: new Date().toLocaleString('es-UY'), inputs }
       lista.push(escenario)
       escribir(lista)

@@ -39,7 +39,14 @@ self.addEventListener('fetch', (e) => {
           caches.open(CACHE).then((c) => c.put(req, copia)).catch(() => {})
           return res
         })
-        .catch(() => caches.match(req).then((hit) => hit || caches.match('./'))),
+        .catch(() =>
+          caches
+            .match(req)
+            .then((hit) => hit || caches.match('./'))
+            .then((res) => res || new Response('Sin conexión y sin copia en caché.', {
+              status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+            })),
+        ),
     )
     return
   }
