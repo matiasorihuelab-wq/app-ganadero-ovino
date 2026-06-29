@@ -12,6 +12,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "preview", "--", "--port", "4174", "--strictPort"],
       "port": 4174
+    },
+    {
+      "name": "ganadero-single",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "preview", "--", "--outDir", "dist-single", "--port", "4175", "--strictPort"],
+      "port": 4175
     }
   ]
 }
