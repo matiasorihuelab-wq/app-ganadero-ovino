@@ -28,7 +28,7 @@ export default function BotonesBeta() {
         onClick={copiar}
         title="Copia datos de diagnóstico (versión, navegador, sistema) para pegar en el formulario o enviar por WhatsApp"
       >
-        {copiado ? '✓ Diagnóstico copiado' : '📋 Diagnóstico'}
+        {copiado ? '✓ Diagnóstico copiado' : '📋 Copiar diagnóstico'}
       </button>
     </>
   )

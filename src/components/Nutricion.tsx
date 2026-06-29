@@ -47,9 +47,9 @@ export default function Nutricion() {
       <div className="aviso warn" style={{ marginBottom: 12 }}>
         <span>🚧</span>
         <span>
-          <strong>Módulo en construcción.</strong> Requerimientos Nutricionales está en
-          desarrollo: todavía no tiene cargadas las tablas oficiales. Esto es una vista previa
-          de la estructura; los valores aún no están disponibles. Lo retomaremos más adelante.
+          <strong>En construcción.</strong> Los Requerimientos Nutricionales se incorporarán en
+          una <strong>futura versión</strong>, usando tablas oficiales (NRC, INRA, AFRC, etc.).
+          Por ahora esta sección no es funcional.
         </span>
       </div>
 
