@@ -22,21 +22,22 @@ Estado: `[ ]` pendiente · `[x]` hecho · `[~]` parcial/diferido.
 | V1-11 | Botón eliminar fila en la tabla de medicamentos | Sí | Bajo | [x] |
 | V1-12 | Confirmar "Cargar ejemplo" antes de sobrescribir | Probable | Bajo | [x] |
 | V1-10 | Mostrar avisos de validación en las 3 pestañas (hoy solo Dashboard) | Probable | Bajo | [x] |
-| V1-08 | Hoja de estilo `@media print` para el reporte PDF (hoy imprime la UI viva) | Probable | Medio | [ ] |
-| V1-13 | Comparar: mostrar kg/animales con unidad, no como `$` | Probable | Bajo | [ ] |
-| V1-15 | Mostrar `lanaPorCab` (C47) como KPI en el dashboard | Opcional | Bajo | [ ] |
-| V1-16 | Columnas de costo por categoría (esquila/alim/carnero) en la tabla de detalle | Opcional | Bajo | [ ] |
-| V1-20 | Timeline: usar cantidades del motor (`r.filas`) para la etiqueta de animales | Opcional | Bajo | [ ] |
-| V1-21 | Quitar línea muerta `cSanidad += 0` en timeline | Opcional | Bajo | [ ] |
-| V1-22 | Unificar formato de micras 0 (CSV vs dashboard) | Opcional | Bajo | [ ] |
+| V1-08 | Hoja de estilo `@media print` para el reporte PDF (hoy imprime la UI viva) | Probable | Medio | [x] |
+| V1-13 | Comparar: mostrar kg/animales con unidad, no como `$` | Probable | Bajo | [x] |
+| V1-15 | Mostrar `lanaPorCab` (C47) como KPI en el dashboard | Opcional | Bajo | [x] |
+| V1-16 | Columnas de costo por categoría (esquila/alim/carnero) en la tabla de detalle | Opcional | Bajo | [x] |
+| V1-20 | Timeline: usar cantidades del motor (`r.filas`) para la etiqueta de animales | Opcional | Bajo | [~] descartado (ambiguo, módulo no-Excel) |
+| V1-21 | Quitar línea muerta `cSanidad += 0` en timeline | Opcional | Bajo | [x] |
+| V1-22 | Unificar formato de micras 0 (CSV vs dashboard) | Opcional | Bajo | [x] |
 | V1-17 | NEB: decidir si persiste (mover a Inputs) o documentarlo como calculadora efímera | Opcional | Medio | [ ] |
-| V1-18 | NEB: agregar columna `+Condición` que falta para que las componentes sumen el total | Opcional | Bajo | [ ] |
-| V1-19 | NEB: badge "estimación no validada contra el Excel" | Opcional | Bajo | [ ] |
+| V1-18 | NEB: agregar columna `+Condición` que falta para que las componentes sumen el total | Opcional | Bajo | [x] |
+| V1-19 | NEB: badge "estimación no validada contra el Excel" | Opcional | Bajo | [x] |
 | V1-23 | Campo huérfano `Medicamento.frecuencia`: exponer o eliminar | Opcional | Bajo | [ ] |
 | V1-24 | Comparar dos escenarios guardados entre sí + aviso A==B | Opcional | Medio | [ ] |
 | V1-25 | CSV: incluir Timeline, NEB y metadatos de cabecera (fecha, raza, ratios /ha /UG) | Opcional | Medio | [ ] |
 | M5 | Identidad de versión del modelo (trazar la app a una revisión del Excel) | Probable | Bajo | [ ] |
-| M8 | Verificar/documentar `build:single` + íconos + PWA (empaquetado de la v1) | Probable | Bajo | [ ] |
+| PWA | **(P1)** SW servía la app cacheada tras deploy → network-first + no registrar en dev. Verificado. | Sí | Medio | [x] |
+| M8 | Verificar/documentar `build:single` + íconos (parte PWA-cache ya resuelta en P1) | Probable | Bajo | [ ] |
 
 ## 🔴 Balde 2 — Requiere el Excel definitivo (etapa posterior — solo `TODO(excel)` por ahora)
 
