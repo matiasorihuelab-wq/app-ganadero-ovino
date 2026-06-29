@@ -62,6 +62,7 @@ export default function ResultadosPanel({ r }: { r: Resultados }) {
         <h3>📈 Producción</h3>
         <div className="kpi-mini-grid">
           <div className="kpi-mini"><div className="v">{fmtNum(r.totalLanaKg, 0)}</div><div className="k">kg lana limpia/año</div></div>
+          <div className="kpi-mini"><div className="v">{fmtNum(r.lanaPorCab, 2)}</div><div className="k">kg lana / cabeza</div></div>
           <div className="kpi-mini"><div className="v">{fmtNum(r.superficieTotal ? r.totalLanaKg / r.superficieTotal : 0, 1)}</div><div className="k">kg lana / ha</div></div>
           <div className="kpi-mini"><div className="v">{fmtNum(r.micronajePonderado, 1)}</div><div className="k">micronaje pond. (µ)</div></div>
           <div className="kpi-mini"><div className="v">{fmtNum(r.totalAnimales, 0)}</div><div className="k">animales en stock</div></div>
@@ -118,7 +119,7 @@ export default function ResultadosPanel({ r }: { r: Resultados }) {
         <div className="body" style={{ overflowX: 'auto' }}>
           <table className="tbl">
             <thead>
-              <tr><th>Categoría</th><th>Cant.</th><th>Lana kg/cab</th><th>Micras</th><th>UG</th><th>Sanidad/cab</th></tr>
+              <tr><th>Categoría</th><th>Cant.</th><th>Lana kg/cab</th><th>Micras</th><th>UG</th><th>Sanidad/cab</th><th>Esquila/cab</th><th>Alim/cab</th><th>Carnero/cab</th></tr>
             </thead>
             <tbody>
               {r.filas.filter((f) => f.cantidad > 0.01).map((f) => (
@@ -129,9 +130,12 @@ export default function ResultadosPanel({ r }: { r: Resultados }) {
                   <td className="num">{f.micras ? fmtNum(f.micras, 1) : '—'}</td>
                   <td className="num">{fmtNum(f.ug, 2)}</td>
                   <td className="num">{fmtUSD(f.costoSanidad, 2)}</td>
+                  <td className="num">{f.costoEsquila ? fmtUSD(f.costoEsquila, 2) : '—'}</td>
+                  <td className="num">{f.costoAlim ? fmtUSD(f.costoAlim, 2) : '—'}</td>
+                  <td className="num">{f.costoCarnero ? fmtUSD(f.costoCarnero, 2) : '—'}</td>
                 </tr>
               ))}
-              <tr className="total"><td>TOTAL</td><td className="num">{fmtNum(r.totalAnimales, 0)}</td><td className="num">{fmtNum(r.totalLanaKg, 0)} kg</td><td></td><td className="num">{fmtNum(r.totalUG, 1)}</td><td></td></tr>
+              <tr className="total"><td>TOTAL</td><td className="num">{fmtNum(r.totalAnimales, 0)}</td><td className="num">{fmtNum(r.totalLanaKg, 0)} kg</td><td></td><td className="num">{fmtNum(r.totalUG, 1)}</td><td></td><td></td><td></td><td></td></tr>
             </tbody>
           </table>
         </div>
