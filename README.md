@@ -14,9 +14,25 @@ medicamento, esquila, alimentación, comercialización) y márgenes finales.
 
 ```bash
 npm install
-npm run dev      # servidor de desarrollo en http://localhost:5174
-npm run build    # build de producción en /dist
+npm run dev           # servidor de desarrollo en http://localhost:5174
+npm run build         # build web/PWA en /dist (para publicar online)
+npm run build:single  # único HTML autocontenido en /dist-single (doble clic, offline)
+npm run preview       # previsualiza el build /dist localmente
 ```
+
+Detalle de cada formato (cuándo usar cada uno, limitaciones, recomendación):
+ver [docs/distribucion.md](docs/distribucion.md).
+
+## Calidad
+
+```bash
+npm run lint        # ESLint
+npm run typecheck   # tipos (tsc --noEmit)
+npm test            # suite del motor (Vitest)
+npm run validate    # motor vs Excel (18/18)
+```
+
+La CI (GitHub Actions) corre todo esto en cada push y Pull Request.
 
 ## Verificación de fórmulas (QA)
 
@@ -43,11 +59,14 @@ src/
     Resultados.tsx   # dashboard KPIs + gráficos (Recharts) + tablas
     Modales.tsx      # guardar / cargar / comparar escenarios
     Campos.tsx       # inputs reutilizables
+  persistence/       # puertos/adapters de persistencia (localStorage)
+    escenario-repository.ts        # escenarios con nombre
+    draft-repository.ts            # autoguardado del borrador actual
   utils/
     format.ts        # formato USD / números / %
-    scenarios.ts     # persistencia de escenarios (localStorage)
     validaciones.ts  # avisos y advertencias
     exportar.ts      # exportar CSV / PDF (print)
+docs/                # vision, architecture, adr/, distribucion, v1-backlog
 ```
 
 ## Funcionalidades
