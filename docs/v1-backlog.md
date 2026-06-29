@@ -14,14 +14,14 @@ Estado: `[ ]` pendiente · `[x]` hecho · `[~]` parcial/diferido.
 
 | ID | Pendiente | Req. v1 | Costo | Estado |
 |----|-----------|---------|-------|--------|
-| V1-07 | Exponer en el form los 4 inputs que el motor usa pero quedan fijos al preset (`pesoDosisAdulto/Cordero/Recria`, `relacionCarnerosStock`) | Sí | Bajo | [ ] |
-| M3 | Autoguardar el borrador actual y restaurarlo al recargar | Sí | Medio | [ ] |
-| V1-09 | Ampliar validaciones (precioDolar=0, rendimiento=0, superficie=0, señalada=0, salario con trabajadores>0) | Sí | Bajo | [ ] |
-| M7 | Rechazar valores negativos en los campos numéricos (sin `min`/clamp hoy) | Sí | Bajo | [ ] |
-| V1-14 | Mostrar `ingresoCapital` (C70) en Indicadores + CSV (ya se calcula) | Sí | Bajo | [ ] |
-| V1-11 | Botón eliminar fila en la tabla de medicamentos | Sí | Bajo | [ ] |
-| V1-12 | Confirmar "Cargar ejemplo" antes de sobrescribir | Probable | Bajo | [ ] |
-| V1-10 | Mostrar avisos de validación en las 3 pestañas (hoy solo Dashboard) | Probable | Bajo | [ ] |
+| V1-07 | Exponer en el form los 4 inputs que el motor usa pero quedan fijos al preset (`pesoDosisAdulto/Cordero/Recria`, `relacionCarnerosStock`) | Sí | Bajo | [x] |
+| M3 | Autoguardar el borrador actual y restaurarlo al recargar | Sí | Medio | [x] |
+| V1-09 | Ampliar validaciones (precioDolar=0, rendimiento=0, superficie=0, señalada=0, salario con trabajadores>0) | Sí | Bajo | [x] |
+| M7 | Rechazar valores negativos en los campos numéricos (sin `min`/clamp hoy) | Sí | Bajo | [x] |
+| V1-14 | Mostrar `ingresoCapital` (C70) en Indicadores + CSV (ya se calcula) | Sí | Bajo | [x] |
+| V1-11 | Botón eliminar fila en la tabla de medicamentos | Sí | Bajo | [x] |
+| V1-12 | Confirmar "Cargar ejemplo" antes de sobrescribir | Probable | Bajo | [x] |
+| V1-10 | Mostrar avisos de validación en las 3 pestañas (hoy solo Dashboard) | Probable | Bajo | [x] |
 | V1-08 | Hoja de estilo `@media print` para el reporte PDF (hoy imprime la UI viva) | Probable | Medio | [ ] |
 | V1-13 | Comparar: mostrar kg/animales con unidad, no como `$` | Probable | Bajo | [ ] |
 | V1-15 | Mostrar `lanaPorCab` (C47) como KPI en el dashboard | Opcional | Bajo | [ ] |
@@ -56,7 +56,10 @@ Estado: `[ ]` pendiente · `[x]` hecho · `[~]` parcial/diferido.
 
 | ID | Pendiente | Estado |
 |----|-----------|--------|
-| M1 | Suite de tests del motor (Vitest): runner + casos + CI. Empezar envolviendo los 18 valores actuales de 'Cord Dest' y dejar la estructura lista para sumar casos por categoría cuando llegue el Excel. | [ ] |
+| M1 | Suite de tests del motor (Vitest): runner + casos + CI. Empezar envolviendo los 18 valores actuales de 'Cord Dest' y dejar la estructura lista para sumar casos por categoría cuando llegue el Excel. | [x] |
+
+> Balde 2: todas las dudas de fidelidad tienen su `TODO(excel)` en el código
+> (commit `docs(engine): flag Excel-fidelity doubts`). No se tocó ninguna fórmula.
 
 ## Confirmado YA completo (no re-trabajar)
 
