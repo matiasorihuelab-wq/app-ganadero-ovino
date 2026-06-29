@@ -21,7 +21,7 @@ const version = pkg.version
 // quede siempre en sincronía con package.json / src/version.ts sin editar este script.
 const rcMatch = /-rc\.(\d+)$/.exec(version)
 const label = rcMatch ? `RC${rcMatch[1]}` : version
-const estado = `Release Candidate (${label})`
+const estado = `Beta cerrada (${label})`
 const fecha = new Date().toISOString().slice(0, 10)
 const commit = (() => {
   try { return execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim() } catch { return '(desconocido)' }

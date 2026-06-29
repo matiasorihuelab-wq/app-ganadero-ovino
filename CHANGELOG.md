@@ -2,10 +2,22 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/).
 
-## [1.0.0-rc.2] — 2026-06-29 — Release Candidate (RC2)
+## [1.0.0-rc.2] — 2026-06-29 — Beta cerrada (RC2)
 
-Rediseño del **módulo nutricional**. El **motor económico permanece intacto** (validado
-18/18 contra el Excel); el cambio está **aislado** en `src/nutrition/`.
+Build de la **beta cerrada** con técnicos del SUL. Incluye el rediseño del **módulo
+nutricional** y la preparación de la **distribución**. El **motor económico permanece
+intacto** (validado 18/18 contra el Excel).
+
+### Beta — distribución
+- El **módulo nutricional queda congelado** y claramente identificado como
+  **"🚧 En construcción"** en la interfaz (banner + pestaña) y en la documentación. No se
+  elimina lo hecho; su desarrollo se retoma más adelante.
+- El botón de reporte pasa a **"🐞 Reportar o sugerir"**: el formulario admite **errores,
+  sugerencias y mejoras** (campo *Tipo de reporte*). Documentación de usuario y de
+  despliegue sincronizadas con el nuevo flujo.
+- `index.html`: metadatos **Open Graph** para una mejor vista previa al compartir el
+  enlace (WhatsApp, etc.).
+- Estado visible de la app: **Beta cerrada**.
 
 ### Cambiado
 - El módulo nutricional pasa de un **modelo energético propio (NEB)** a un **motor de

@@ -27,7 +27,7 @@ npm run dev           # servidor de desarrollo en http://localhost:5174
 npm run build         # build web/PWA en /dist (para publicar online)
 npm run build:single  # único HTML autocontenido en /dist-single (doble clic, offline)
 npm run preview       # previsualiza el build /dist localmente
-npm run package       # arma el paquete de distribución en /release (RC1)
+npm run package       # arma el paquete de distribución en /release (beta)
 ```
 
 Detalle de cada formato (cuándo usar cada uno, limitaciones, recomendación):
@@ -95,7 +95,7 @@ src/
     format.ts        # formato USD / números / %
     validaciones.ts  # avisos y advertencias
     exportar.ts      # exportar CSV / PDF (print)
-  version.ts         # versión visible de la app (RC1)
+  version.ts         # versión visible de la app (RC2)
 docs/                # vision, architecture, distribucion, v1-backlog, production-review,
                      # BASELINE_RC1, CHANGE_POLICY, adr/, usuario/ (manual), excel-audit/
 ```

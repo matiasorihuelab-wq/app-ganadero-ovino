@@ -106,6 +106,27 @@ repo o el owner, la URL cambia en consecuencia: `https://<owner>.github.io/<repo
 La URL exacta también aparece al terminar el workflow (job **deploy**, campo
 *page_url*) y en **Settings → Pages**.
 
+## 9. Formulario de reporte (errores / sugerencias / mejoras)
+
+El botón **🐞 Reportar o sugerir** abre un formulario externo. Para dejarlo operativo:
+
+1. **Crear el formulario** (lo más simple: Google Forms, gratis) con estos campos
+   (**no pedir institución**):
+   - Nombre · Correo electrónico · Teléfono (opcional)
+   - **Tipo de reporte:** Error / Sugerencia / Mejora *(opción única)*
+   - ¿Qué estabas intentando hacer? · ¿Qué ocurrió? · ¿Qué esperabas que ocurriera?
+   - ¿Se puede repetir? (Siempre / A veces / Una sola vez / No sé)
+   - Navegador (Chrome / Edge / Firefox / Safari / Otro)
+   - Sistema operativo (Windows / Android / iPhone-iPad / Mac / Linux / Otro)
+   - Versión de la aplicación (texto; el usuario la copia con **📋 Diagnóstico**)
+   - Captura de pantalla (subir archivo)
+2. **Copiar el enlace** del formulario (en Google Forms: *Enviar → 🔗 → Copiar*).
+3. **Pegarlo** en `src/bug-report.ts`, en la constante `BUG_REPORT_URL` (reemplaza el
+   placeholder), commitear y publicar (push a `main`).
+
+> El flujo de usuario está documentado en
+> [docs/usuario/reportar-errores.md](usuario/reportar-errores.md).
+
 ## Notas técnicas
 
 - La app es **compatible con subdirectorio** por diseño: `base: './'` (rutas relativas),

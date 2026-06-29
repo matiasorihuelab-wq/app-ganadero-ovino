@@ -10,6 +10,6 @@ programadores).
 - **[Limitaciones conocidas](limitaciones.md)** — qué tener en cuenta en esta versión.
 - **[Cómo reportar errores](reportar-errores.md)**.
 
-> Esta es una versión **Release Candidate (RC1)** para una beta cerrada. El motor de
+> Esta es una versión **Release Candidate (RC2)** para una beta cerrada. El motor de
 > cálculo todavía se va a validar contra el Excel de referencia, así que algunos
 > números podrían ajustarse. Ver [limitaciones](limitaciones.md).

@@ -15,7 +15,9 @@
   1. **Motor económico** (`src/engine/`) — **congelado** (baseline RC1). Réplica fiel del
      Excel. **No se toca** sin leer `docs/BASELINE_RC1.md` + `docs/CHANGE_POLICY.md`.
   2. **Módulo de Requerimientos Nutricionales** (`src/nutrition/`) — **rediseñado en
-     RC2** como motor de consulta (ver punto 2).
+     RC2** como motor de consulta (ver punto 2), pero **congelado / "🚧 En construcción"**:
+     su desarrollo está **detenido** (marcado así en la UI) hasta tener las tablas
+     oficiales. No eliminar lo hecho; no seguir desarrollándolo por ahora.
 
 ## 2. Arquitectura vigente
 
@@ -36,7 +38,7 @@ src/
   components/    # UI React. Nutricion.tsx = UI del módulo nutricional.
   persistence/   # puertos EscenarioRepository + BorradorRepository (localStorage)
   utils/         # format, validaciones, exportar (CSV/PDF)
-  bug-report.ts  # botón "Reportar un problema" + diagnóstico (beta)
+  bug-report.ts  # botón "Reportar o sugerir" + diagnóstico (beta)
   version.ts     # versión visible (RC2)
 ```
 
@@ -105,7 +107,7 @@ Detalle completo en [docs/nutricion/README.md](nutricion/README.md).
   política de cambios.
 - **Datos sin fuente:** ninguna tabla del módulo nutricional debe cargarse sin referencia
   bibliográfica (regla del provider).
-- **El botón "Reportar un problema"** usa `BUG_REPORT_URL` en `src/bug-report.ts`, que es
+- **El botón "Reportar o sugerir"** usa `BUG_REPORT_URL` en `src/bug-report.ts`, que es
   un **placeholder**: hay que pegar la URL real del formulario para que sea operativo.
 
 ## 8. Ubicación de la documentación

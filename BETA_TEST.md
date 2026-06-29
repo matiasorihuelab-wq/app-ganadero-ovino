@@ -1,9 +1,9 @@
-# Guía de Beta — App de Rentabilidad Ovina (RC1)
+# Guía de Beta — App de Rentabilidad Ovina (Beta · RC2)
 
 ¡Gracias por probar la aplicación! Sos parte de un grupo reducido que nos ayuda a
 dejarla lista. Esta guía te dice **qué probar** y **cómo avisarnos** si algo no anda.
 
-> **Importante:** esta es una versión de prueba (**Release Candidate RC1**). El motor de
+> **Importante:** esta es una versión de prueba (**Release Candidate RC2**, beta cerrada). El motor de
 > cálculo todavía **se va a validar contra el Excel de referencia**, así que algunos
 > números podrían ajustarse más adelante. Tu objetivo en esta beta es probar que la
 > **aplicación funcione y sea clara**, más que verificar la exactitud final de las cifras
@@ -22,7 +22,8 @@ dejarla lista. Esta guía te dice **qué probar** y **cómo avisarnos** si algo 
 - **Guardar, cargar y comparar** escenarios (botones 💾 / 📂 / 🔄).
 - **Cerrar y volver a abrir** la app: ¿recuperás tu trabajo?
 - **Exportar**: el **CSV** (📊) y el **PDF** (📥, vía imprimir → guardar como PDF).
-- Las **tres pestañas**: Dashboard, Evolución y Energético.
+- Las pestañas **Dashboard** y **Evolución**. *(La pestaña **🚧 Requerimientos** está
+  **en construcción**: podés mirarla, pero todavía no es funcional.)*
 - Probarla en **distintos dispositivos** si podés (PC, celular).
 
 ## Qué tipo de problemas reportar
@@ -33,26 +34,17 @@ dejarla lista. Esta guía te dice **qué probar** y **cómo avisarnos** si algo 
 - Un **resultado que te parece incorrecto** (avisá aunque no estés seguro).
 - Una **idea de mejora** de la experiencia (no de nuevas funciones, sino de claridad/uso).
 
-## Cómo enviarnos un problema
+## Cómo enviarnos un reporte (error, sugerencia o mejora)
 
-Usá el botón **🐞 Reportar un problema** (en la barra de la aplicación): abre el
-formulario de reporte en una pestaña nueva. Antes de enviarlo, tocá **📋 Diagnóstico**
+Usá el botón **🐞 Reportar o sugerir** (en la barra de la aplicación): abre el
+formulario en una pestaña nueva. Sirve para **errores**, **sugerencias** y **mejoras**
+(lo elegís en el campo *Tipo de reporte*). Antes de enviarlo, tocá **📋 Diagnóstico**
 para copiar tu versión/navegador/sistema y pegalo en el formulario.
 
-Detalle en **[Cómo reportar errores](docs/usuario/reportar-errores.md)**. En el formulario
-te vamos a pedir, en resumen:
-
-```
-Versión: RC1   (aparece arriba a la derecha, junto al título)
-Dispositivo / navegador:
-Qué hice (pasos):
-Qué esperaba:
-Qué pasó:
-Captura adjunta: sí / no
-CSV adjunto (si es un tema de número): sí / no
-```
-
-Todo se envía mediante el botón **🐞 Reportar un problema** dentro de la app.
+El formulario te va a pedir: nombre, correo, teléfono (opcional), **tipo de reporte**
+(Error / Sugerencia / Mejora), qué intentabas, qué ocurrió, qué esperabas, si se repite,
+navegador, sistema, versión y una captura. Detalle completo en
+**[Reportar un problema o enviar una sugerencia](docs/usuario/reportar-errores.md)**.
 
 ## Lo que NO hace falta que hagas
 

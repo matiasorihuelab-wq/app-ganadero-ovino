@@ -1,4 +1,4 @@
-# Limitaciones conocidas (RC1)
+# Limitaciones conocidas (RC2 · Beta)
 
 Esta versión es un **Release Candidate** para una beta cerrada. Es funcional y estable,
 pero conviene tener presente lo siguiente.
@@ -9,8 +9,10 @@ pero conviene tener presente lo siguiente.
   fielmente el modelo de referencia en el escenario de ejemplo validado, pero algunas
   fórmulas, coeficientes o valores podrían **ajustarse** tras esa auditoría. Tomá los
   resultados como una **muy buena aproximación**, no como cifras finales.
-- Las vistas **Evolución** (mes a mes) y **Energético (NEB)** son **estimaciones propias
-  de la app** (no provienen del Excel): sirven para orientar, no como números exactos.
+- La vista **Evolución** (mes a mes) es una **estimación propia de la app** (no proviene
+  del Excel): sirve para orientar, no como números exactos.
+- La pestaña **🚧 Requerimientos** (nutricionales) está **en construcción**: todavía no
+  es funcional y no debe usarse para decisiones.
 
 ## Sobre los datos
 

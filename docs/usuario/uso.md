@@ -39,7 +39,8 @@ Consejos:
   hectárea y por oveja), indicadores de producción y gráficos de composición.
 - **📅 Evolución** — cómo se distribuye el resultado **mes a mes** a lo largo del ciclo
   (flujo de caja). La suma del año coincide con el margen neto del dashboard.
-- **🔥 Energético** — necesidades energéticas del rebaño y costo de ración estimado.
+- **🚧 Requerimientos** — consulta de requerimientos nutricionales oficiales. **En
+  construcción**: por ahora podés mirar la estructura, pero todavía no es funcional.
 
 ## 4. Guardar y comparar escenarios
 

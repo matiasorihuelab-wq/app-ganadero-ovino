@@ -1,48 +1,44 @@
-# Cómo reportar errores
+# Reportar un problema o enviar una sugerencia
 
-Tu reporte es muy valioso para mejorar la aplicación. No hace falta que sepas de
-computación: con que cuentes **qué hiciste y qué pasó**, alcanza.
+Tu opinión es muy valiosa para mejorar la aplicación. No hace falta que sepas de
+computación. Podés reportar **tres cosas**:
 
-## Cómo reportar
+- 🐞 **Errores** — algo que falla, se traba o se ve mal.
+- 💡 **Sugerencias** — una idea para que sea más clara o más útil.
+- ✨ **Mejoras** — algo que ya existe pero podría funcionar mejor.
 
-Usá el botón **🐞 Reportar un problema** (arriba en la barra de la aplicación): abre el
-**formulario de reporte** en una pestaña nueva. Completá los campos y enviá.
+## Cómo enviarlo
 
-Para que el reporte sea más útil, antes de enviarlo tocá **📋 Diagnóstico** (al lado del
-botón anterior): copia automáticamente tu versión, navegador y sistema. **Pegá** eso en
-el formulario (o mandalo por WhatsApp). No incluye ningún dato personal.
+Usá el botón **🐞 Reportar o sugerir** (arriba, en la barra de la aplicación): abre el
+**formulario** en una pestaña nueva. Elegí el **tipo de reporte**, completá y enviá.
 
-## Qué incluir (cuanto más, mejor)
+Para que sea más útil, antes de enviarlo tocá **📋 Diagnóstico** (al lado): copia tu
+versión, navegador y sistema. **Pegá** eso en el formulario (o mandalo por WhatsApp).
+No incluye ningún dato personal.
 
-1. **Versión:** la etiqueta que aparece arriba a la derecha, junto al título
-   (por ejemplo **RC1**).
-2. **Qué dispositivo y navegador usaste:** p. ej. "PC con Windows, Chrome" o
-   "celular Android, navegador del celular".
-3. **Qué estabas haciendo:** los pasos, lo más concretos posible.
-   Ejemplo: "Cargué el ejemplo, cambié la señalada a 95 y miré el Dashboard".
-4. **Qué esperabas que pasara** y **qué pasó en realidad**.
-5. **Una captura de pantalla** si podés (muestra mucho más que mil palabras).
-6. Si el problema es con un **número/cálculo**, exportá el **CSV** (botón 📊 CSV) y
-   adjuntalo: así podemos reproducir tu caso exacto.
+## Qué te va a pedir el formulario
 
-## Plantilla rápida (copiar y completar)
+- **Nombre**
+- **Correo electrónico**
+- **Teléfono** (opcional)
+- **Tipo de reporte:** Error / Sugerencia / Mejora
+- **¿Qué estabas intentando hacer?**
+- **¿Qué ocurrió?**
+- **¿Qué esperabas que ocurriera?**
+- **¿Se puede repetir?** (Siempre / A veces / Una sola vez / No sé)
+- **Navegador** (Chrome / Edge / Firefox / Safari / Otro)
+- **Sistema operativo** (Windows / Android / iPhone-iPad / Mac / Linux / Otro)
+- **Versión de la aplicación** (aparece arriba a la derecha, junto al título — hoy **RC2**)
+- **Captura de pantalla** (adjuntar, si podés)
 
-```
-Versión: RC1
-Dispositivo / navegador:
-Qué hice (pasos):
-Qué esperaba:
-Qué pasó:
-Captura adjunta: sí / no
-CSV adjunto (si es un tema de cálculo): sí / no
-```
+> No te pedimos tu institución ni ningún dato más del necesario.
 
-## Tipos de problemas que nos interesan
+## Consejos para un buen reporte
 
-- La app se **traba**, queda en blanco o muestra un error.
-- Algo **no se ve bien** (texto cortado, botón que no responde, en celular).
-- Un **número que parece incorrecto** (¡avisá igual, aunque no estés seguro!).
-- Algo **confuso** o difícil de entender.
-
-> Recordá: el motor de cálculo todavía se va a **validar contra el Excel**. Si un número
-> te parece raro, reportalo igual; nos sirve para esa auditoría.
+- Contá los **pasos** lo más concretos posible.
+  Ejemplo: "Cargué el ejemplo, cambié la señalada a 95 y miré el Dashboard".
+- Una **captura de pantalla** muestra más que mil palabras.
+- Si el problema es con un **número/cálculo**, exportá el **CSV** (botón 📊 CSV) y
+  adjuntalo: así podemos reproducir tu caso exacto.
+- ¿Un número te parece raro? Reportalo igual, aunque no estés seguro: el motor de cálculo
+  todavía se va a **validar contra el Excel**, y tu aviso nos sirve para esa auditoría.
