@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Inputs } from '../engine/types'
 import { calcular } from '../engine/calc'
 import { sanitizeInputs } from '../engine/presets'
@@ -34,7 +34,7 @@ export function ModalCargar({ onClose, onLoad }: { onClose: () => void; onLoad: 
           <div className="scn-row" key={e.id}>
             <div className="nm">{e.nombre}<div className="mt">{e.fecha} · MN {fmtUSD(r.margenNeto, 0)}</div></div>
             <button className="btn-pri" onClick={() => { onLoad(sanitizeInputs(e.inputs)); onClose() }}>Cargar</button>
-            <button className="btn-danger" onClick={() => { escenarioRepository.eliminar(e.id); setLista(escenarioRepository.listar()) }}>Eliminar</button>
+            <button className="btn-danger" onClick={() => { if (confirm(`¿Eliminar el escenario "${e.nombre}"?`)) { escenarioRepository.eliminar(e.id); setLista(escenarioRepository.listar()) } }}>Eliminar</button>
           </div>
         )
       })}
@@ -108,9 +108,15 @@ function Cells({ lbl, a, b, d, cls }: { lbl: string; a: string; b: string; d: st
 }
 
 function Backdrop({ children, onClose, wide }: { children: React.ReactNode; onClose: () => void; wide?: boolean }) {
+  // Cerrar con Escape (expectativa universal de un diálogo).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onClose])
   return (
     <div className="modal-bg" onClick={onClose}>
-      <div className="modal" style={wide ? { width: 'min(760px, 94vw)' } : undefined} onClick={(e) => e.stopPropagation()}>
+      <div className="modal" role="dialog" aria-modal="true" style={wide ? { width: 'min(760px, 94vw)' } : undefined} onClick={(e) => e.stopPropagation()}>
         {children}
       </div>
     </div>

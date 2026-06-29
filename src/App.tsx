@@ -46,6 +46,13 @@ export default function App() {
   const r = useMemo(() => calcular(inp), [inp])
   const avisos = useMemo(() => validar(inp, r), [inp, r])
 
+  // ¿Hay datos cargados? (para confirmar antes de pisarlos). El borrador se
+  // autoguarda, así que reemplazar sin avisar perdería el trabajo en curso.
+  const tieneDatos = () => JSON.stringify(inp) !== JSON.stringify(INPUTS_VACIO)
+  const cargarEjemplo = () => { if (!tieneDatos() || confirm('¿Cargar el ejemplo y reemplazar los datos actuales?')) setInp(INPUTS_EJEMPLO) }
+  const limpiar = () => { if (confirm('¿Vaciar todos los campos?')) setInp(INPUTS_VACIO) }
+  const cargarEscenario = (inputs: Inputs) => { if (!tieneDatos() || confirm('¿Cargar este escenario y reemplazar los datos actuales?')) setInp(inputs) }
+
   return (
     <>
       <header className="header">
@@ -59,8 +66,8 @@ export default function App() {
         </div>
         <div className="spacer" />
         <div className="toolbar">
-          <button className="btn-sec" onClick={() => { const dirty = JSON.stringify(inp) !== JSON.stringify(INPUTS_VACIO); if (!dirty || confirm('¿Cargar el ejemplo y reemplazar los datos actuales?')) setInp(INPUTS_EJEMPLO) }}>Cargar ejemplo</button>
-          <button className="btn-sec" onClick={() => { if (confirm('¿Vaciar todos los campos?')) setInp(INPUTS_VACIO) }}>Limpiar</button>
+          <button className="btn-sec" onClick={cargarEjemplo}>Cargar ejemplo</button>
+          <button className="btn-sec" onClick={limpiar}>Limpiar</button>
           <button className="btn-sec" onClick={() => setModal('guardar')}>💾 Guardar</button>
           <button className="btn-sec" onClick={() => setModal('cargar')}>📂 Cargar</button>
           <button className="btn-sec" onClick={() => setModal('comparar')}>🔄 Comparar</button>
@@ -96,7 +103,7 @@ export default function App() {
       </div>
 
       {modal === 'guardar' && <ModalGuardar inp={inp} onClose={() => setModal(null)} />}
-      {modal === 'cargar' && <ModalCargar onClose={() => setModal(null)} onLoad={setInp} />}
+      {modal === 'cargar' && <ModalCargar onClose={() => setModal(null)} onLoad={cargarEscenario} />}
       {modal === 'comparar' && <ModalComparar actual={inp} onClose={() => setModal(null)} />}
     </>
   )
