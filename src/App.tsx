@@ -9,12 +9,12 @@ import { APP_VERSION, APP_VERSION_LABEL, APP_ESTADO } from './version'
 import Formulario from './components/Formulario'
 import ResultadosPanel from './components/Resultados'
 import Timeline from './components/Timeline'
-import Neb from './components/Neb'
+import Nutricion from './components/Nutricion'
 import { ModalGuardar, ModalCargar, ModalComparar } from './components/Modales'
 import BotonesBeta from './components/BotonesBeta'
 
 type ModalActivo = null | 'guardar' | 'cargar' | 'comparar'
-type Vista = 'dashboard' | 'timeline' | 'neb'
+type Vista = 'dashboard' | 'timeline' | 'nutricion'
 
 // Borrador inicial: lo guardado (saneado sobre el vacío para tolerar campos que
 // falten o esquemas viejos/corruptos) o el preset vacío. (M3)
@@ -87,7 +87,7 @@ export default function App() {
           <div className="tabs">
             <button className={vista === 'dashboard' ? 'tab on' : 'tab'} onClick={() => setVista('dashboard')}>📊 Dashboard</button>
             <button className={vista === 'timeline' ? 'tab on' : 'tab'} onClick={() => setVista('timeline')}>📅 Evolución</button>
-            <button className={vista === 'neb' ? 'tab on' : 'tab'} onClick={() => setVista('neb')}>🔥 Energético</button>
+            <button className={vista === 'nutricion' ? 'tab on' : 'tab'} onClick={() => setVista('nutricion')}>🥗 Requerimientos</button>
           </div>
           {avisos.length > 0 && (
             <div className="avisos">
@@ -101,7 +101,7 @@ export default function App() {
           )}
           {vista === 'dashboard' && <ResultadosPanel r={r} />}
           {vista === 'timeline' && <Timeline inp={inp} r={r} />}
-          {vista === 'neb' && <Neb inp={inp} r={r} />}
+          {vista === 'nutricion' && <Nutricion />}
         </div>
       </div>
 
