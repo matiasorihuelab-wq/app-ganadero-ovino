@@ -1,5 +1,5 @@
 import type { Inputs, CategoriaVenta, SistemaEngorde, ModoPrecios } from '../engine/types'
-import { NumberField, TextField, DateField, SelectField, Section } from './Campos'
+import { NumberField, TextField, DateField, SelectField, Section, aNumeroNoNeg } from './Campos'
 
 const CATEGORIAS: { value: CategoriaVenta; label: string }[] = [
   { value: 'Cord Dest', label: 'Cordero Destete' },
@@ -43,6 +43,9 @@ export default function Formulario({ inp, set }: { inp: Inputs; set: (p: Partial
       {/* 2. Configuración productiva */}
       <Section title="2 · Configuración Productiva">
         <SelectField label="Categoría de venta" value={inp.categoriaVenta} onChange={(v) => set({ categoriaVenta: v })} options={CATEGORIAS} />
+        {/* TODO(excel): la señalada se edita como % pero el modelo la usa como "corderos
+            por oveja" y puede superar 1,0 (ej. 1,2 = 120%). Confirmar unidad/escala con
+            el Excel; mostrar >100% como % puede confundir. (M2) */}
         <NumberField label="Señalada / corderos por oveja" value={inp.senaladaBase} onChange={(v) => set({ senaladaBase: v })} pct suffix="%" hint="marcación lograda" />
         <div className="grid2">
           <SelectField label="Engorde de corderos" value={inp.sistemaEngordeCorderos} onChange={(v) => set({ sistemaEngordeCorderos: v })} options={SISTEMAS} />
@@ -94,15 +97,16 @@ export default function Formulario({ inp, set }: { inp: Inputs; set: (p: Partial
       <Section title="6 · Costos de Sanidad">
         <table className="tbl med-table">
           <thead>
-            <tr><th>Medicamento</th><th>Precio env. (USD)</th><th>Volumen</th><th>Dosis</th></tr>
+            <tr><th>Medicamento</th><th>Precio env. (USD)</th><th>Volumen</th><th>Dosis</th><th aria-label="Eliminar"></th></tr>
           </thead>
           <tbody>
             {inp.medicamentos.map((m, i) => (
               <tr key={i}>
                 <td><input className="txt" value={m.nombre} onChange={(e) => med(i, { nombre: e.target.value })} /></td>
-                <td><input type="number" value={m.precio} onChange={(e) => med(i, { precio: +e.target.value })} /></td>
-                <td><input type="number" value={m.volumen} onChange={(e) => med(i, { volumen: +e.target.value })} /></td>
-                <td><input type="number" step="0.001" value={m.dosis} onChange={(e) => med(i, { dosis: +e.target.value })} /></td>
+                <td><input type="number" min={0} value={m.precio} onWheel={(e) => e.currentTarget.blur()} onChange={(e) => med(i, { precio: aNumeroNoNeg(e.target.value) })} /></td>
+                <td><input type="number" min={0} value={m.volumen} onWheel={(e) => e.currentTarget.blur()} onChange={(e) => med(i, { volumen: aNumeroNoNeg(e.target.value) })} /></td>
+                <td><input type="number" min={0} step="0.001" value={m.dosis} onWheel={(e) => e.currentTarget.blur()} onChange={(e) => med(i, { dosis: aNumeroNoNeg(e.target.value) })} /></td>
+                <td><button type="button" className="btn-danger" title="Eliminar medicamento" onClick={() => set({ medicamentos: inp.medicamentos.filter((_, j) => j !== i) })}>✕</button></td>
               </tr>
             ))}
           </tbody>
@@ -114,6 +118,11 @@ export default function Formulario({ inp, set }: { inp: Inputs; set: (p: Partial
           <NumberField label="Ectima" value={inp.costoEctima} onChange={(v) => set({ costoEctima: v })} suffix="USD/cab" step={0.01} />
         </div>
         <NumberField label="Coeficiente de seguridad" value={inp.coefSeguridad} onChange={(v) => set({ coefSeguridad: v })} hint="pérdidas, residuo, dosificación extra" step={0.05} />
+        <div className="grid3" style={{ marginTop: 12 }}>
+          <NumberField label="Peso dosis adulto" value={inp.pesoDosisAdulto} onChange={(v) => set({ pesoDosisAdulto: v })} suffix="kg" hint="para prorratear dosis" />
+          <NumberField label="Peso dosis cordero" value={inp.pesoDosisCordero} onChange={(v) => set({ pesoDosisCordero: v })} suffix="kg" />
+          <NumberField label="Peso dosis recría" value={inp.pesoDosisRecria} onChange={(v) => set({ pesoDosisRecria: v })} suffix="kg" />
+        </div>
       </Section>
 
       {/* 7. Otros costos operativos */}
@@ -137,6 +146,7 @@ export default function Formulario({ inp, set }: { inp: Inputs; set: (p: Partial
           <NumberField label="Precio carnero" value={inp.precioCarnero} onChange={(v) => set({ precioCarnero: v })} suffix="USD" />
           <NumberField label="Ovejas por carnero" value={inp.ovejasPorCarnero} onChange={(v) => set({ ovejasPorCarnero: v })} suffix="#" />
           <NumberField label="Vida útil carnero" value={inp.vidaCarneroAnios} onChange={(v) => set({ vidaCarneroAnios: v })} suffix="años" />
+          <NumberField label="Carneros / oveja en stock" value={inp.relacionCarnerosStock} onChange={(v) => set({ relacionCarnerosStock: v })} suffix="#/oveja" step={0.005} hint="relación carneros sobre stock" />
         </div>
         <div className="grid2">
           <NumberField label="Salario mensual" value={inp.salarioMensualUYU} onChange={(v) => set({ salarioMensualUYU: v })} suffix="UYU/mes" />

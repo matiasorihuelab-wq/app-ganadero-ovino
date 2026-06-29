@@ -1,32 +1,65 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { Inputs } from './engine/types'
 import { calcular } from './engine/calc'
-import { INPUTS_VACIO, INPUTS_EJEMPLO } from './engine/presets'
+import { INPUTS_VACIO, INPUTS_EJEMPLO, sanitizeInputs } from './engine/presets'
 import { validar } from './utils/validaciones'
 import { exportarCSV, exportarPDF } from './utils/exportar'
+import { borradorRepository } from './persistence'
+import { APP_VERSION, APP_VERSION_LABEL, APP_ESTADO } from './version'
 import Formulario from './components/Formulario'
 import ResultadosPanel from './components/Resultados'
 import Timeline from './components/Timeline'
-import Neb from './components/Neb'
+import Nutricion from './components/Nutricion'
 import { ModalGuardar, ModalCargar, ModalComparar } from './components/Modales'
+import BotonesBeta from './components/BotonesBeta'
 
 type ModalActivo = null | 'guardar' | 'cargar' | 'comparar'
-type Vista = 'dashboard' | 'timeline' | 'neb'
+type Vista = 'dashboard' | 'timeline' | 'nutricion'
+
+// Borrador inicial: lo guardado (saneado sobre el vacío para tolerar campos que
+// falten o esquemas viejos/corruptos) o el preset vacío. (M3)
+function inicial(): Inputs {
+  const guardado = borradorRepository.cargar()
+  return guardado ? sanitizeInputs(guardado) : INPUTS_VACIO
+}
 
 export default function App() {
-  const [inp, setInp] = useState<Inputs>(INPUTS_VACIO)
+  const [inp, setInp] = useState<Inputs>(inicial)
   const [modal, setModal] = useState<ModalActivo>(null)
   const [vista, setVista] = useState<Vista>('dashboard')
+
+  // Autoguardado del borrador con debounce (no escribe en cada tecla). (M3, H-14)
+  useEffect(() => {
+    const id = setTimeout(() => borradorRepository.guardar(inp), 400)
+    return () => clearTimeout(id)
+  }, [inp])
+
+  // Flush del último cambio al ocultar/cerrar la pestaña (no perder lo tipeado
+  // dentro de la ventana de debounce).
+  const inpRef = useRef(inp)
+  inpRef.current = inp
+  useEffect(() => {
+    const flush = () => { if (document.visibilityState === 'hidden') borradorRepository.guardar(inpRef.current) }
+    document.addEventListener('visibilitychange', flush)
+    return () => document.removeEventListener('visibilitychange', flush)
+  }, [])
 
   const set = (patch: Partial<Inputs>) => setInp((prev) => ({ ...prev, ...patch }))
   const r = useMemo(() => calcular(inp), [inp])
   const avisos = useMemo(() => validar(inp, r), [inp, r])
 
+  // ¿Hay datos cargados? (para confirmar antes de pisarlos). El borrador se
+  // autoguarda, así que reemplazar sin avisar perdería el trabajo en curso.
+  const tieneDatos = () => JSON.stringify(inp) !== JSON.stringify(INPUTS_VACIO)
+  const cargarEjemplo = () => { if (!tieneDatos() || confirm('¿Cargar el ejemplo y reemplazar los datos actuales?')) setInp(INPUTS_EJEMPLO) }
+  const limpiar = () => { if (confirm('¿Vaciar todos los campos?')) setInp(INPUTS_VACIO) }
+  const cargarEscenario = (inputs: Inputs) => { if (!tieneDatos() || confirm('¿Cargar este escenario y reemplazar los datos actuales?')) setInp(inputs) }
+
   return (
     <>
       <header className="header">
         <div>
-          <h1>🐑 Análisis de Rentabilidad Ovina</h1>
+          <h1>🐑 Análisis de Rentabilidad Ovina <span className="ver-badge" title={`${APP_ESTADO} · ${APP_VERSION}`}>{APP_VERSION_LABEL}</span></h1>
           <div className="sub">Template genérico · cualquier raza · cálculos en tiempo real</div>
         </div>
         <div className="raza-input">
@@ -35,13 +68,14 @@ export default function App() {
         </div>
         <div className="spacer" />
         <div className="toolbar">
-          <button className="btn-sec" onClick={() => setInp(INPUTS_EJEMPLO)}>Cargar ejemplo</button>
-          <button className="btn-sec" onClick={() => { if (confirm('¿Vaciar todos los campos?')) setInp(INPUTS_VACIO) }}>Limpiar</button>
+          <button className="btn-sec" onClick={cargarEjemplo}>Cargar ejemplo</button>
+          <button className="btn-sec" onClick={limpiar}>Limpiar</button>
           <button className="btn-sec" onClick={() => setModal('guardar')}>💾 Guardar</button>
           <button className="btn-sec" onClick={() => setModal('cargar')}>📂 Cargar</button>
           <button className="btn-sec" onClick={() => setModal('comparar')}>🔄 Comparar</button>
           <button className="btn-sec" onClick={() => exportarCSV(inp, r)}>📊 CSV</button>
           <button className="btn-sec" onClick={exportarPDF}>📥 PDF</button>
+          <BotonesBeta />
         </div>
       </header>
 
@@ -53,9 +87,9 @@ export default function App() {
           <div className="tabs">
             <button className={vista === 'dashboard' ? 'tab on' : 'tab'} onClick={() => setVista('dashboard')}>📊 Dashboard</button>
             <button className={vista === 'timeline' ? 'tab on' : 'tab'} onClick={() => setVista('timeline')}>📅 Evolución</button>
-            <button className={vista === 'neb' ? 'tab on' : 'tab'} onClick={() => setVista('neb')}>🔥 Energético</button>
+            <button className={vista === 'nutricion' ? 'tab on' : 'tab'} onClick={() => setVista('nutricion')} title="Módulo en construcción">🚧 Requerimientos</button>
           </div>
-          {avisos.length > 0 && vista === 'dashboard' && (
+          {avisos.length > 0 && (
             <div className="avisos">
               {avisos.map((a, i) => (
                 <div key={i} className={'aviso ' + a.tipo}>
@@ -65,14 +99,14 @@ export default function App() {
               ))}
             </div>
           )}
-          {vista === 'dashboard' && <ResultadosPanel inp={inp} r={r} />}
+          {vista === 'dashboard' && <ResultadosPanel r={r} />}
           {vista === 'timeline' && <Timeline inp={inp} r={r} />}
-          {vista === 'neb' && <Neb inp={inp} r={r} />}
+          {vista === 'nutricion' && <Nutricion />}
         </div>
       </div>
 
       {modal === 'guardar' && <ModalGuardar inp={inp} onClose={() => setModal(null)} />}
-      {modal === 'cargar' && <ModalCargar onClose={() => setModal(null)} onLoad={setInp} />}
+      {modal === 'cargar' && <ModalCargar onClose={() => setModal(null)} onLoad={cargarEscenario} />}
       {modal === 'comparar' && <ModalComparar actual={inp} onClose={() => setModal(null)} />}
     </>
   )

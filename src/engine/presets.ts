@@ -76,8 +76,27 @@ export const INPUTS_VACIO: Inputs = {
   salarioMensualUYU: 0,
   aguinaldoFactor: 14,
   cargasSociales: 1.075,
+  // TODO(excel): rentaHa/contribucionHa NO son 0 en el preset "vacío", así que un
+  // predio nuevo genera costo de renta/contribución "fantasma" (P22/P23>0) sin que el
+  // usuario los cargue. Decidir si son constantes estructurales legítimas o deberían
+  // arrancar en 0. No tocar hasta confirmar con el Excel. (M6)
   rentaHa: 60,
   contribucionHa: 8,
+}
+
+/**
+ * Normaliza datos de entrada provenientes de almacenamiento (borrador, escenarios
+ * guardados) hacia un `Inputs` válido y completo: mergea sobre el preset vacío para
+ * rellenar campos faltantes de versiones viejas y garantiza que `medicamentos` sea
+ * un array. Evita TypeErrors al cargar esquemas viejos o corruptos.
+ */
+export function sanitizeInputs(raw: unknown): Inputs {
+  const parcial = raw && typeof raw === 'object' ? (raw as Partial<Inputs>) : {}
+  const merged: Inputs = { ...INPUTS_VACIO, ...parcial }
+  if (!Array.isArray(merged.medicamentos)) {
+    merged.medicamentos = INPUTS_VACIO.medicamentos.map((m) => ({ ...m }))
+  }
+  return merged
 }
 
 // ============================================================================

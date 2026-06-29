@@ -35,6 +35,7 @@ body {
   flex-wrap: wrap;
 }
 .header h1 { font-size: 19px; margin: 0; font-weight: 700; letter-spacing: .3px; }
+.ver-badge { font-size: 10px; font-weight: 700; letter-spacing: .5px; vertical-align: middle; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.35); color: #fff; border-radius: 10px; padding: 1px 7px; margin-left: 6px; }
 .header .sub { opacity: .85; font-size: 12px; }
 .header .spacer { flex: 1; }
 .header .raza-input { display: flex; flex-direction: column; gap: 2px; }
@@ -134,6 +135,7 @@ table.tbl td.num { font-family: 'Consolas', monospace; }
 .modal-bg { position: fixed; inset: 0; background: rgba(40,30,15,.45); display: flex; align-items: center; justify-content: center; z-index: 50; }
 .modal { background: #fff; border-radius: 12px; padding: 22px; width: min(640px, 92vw); max-height: 86vh; overflow-y: auto; box-shadow: 0 12px 40px rgba(0,0,0,.3); }
 .modal h2 { margin: 0 0 14px; color: var(--secundario); }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
 .scn-row { display: flex; align-items: center; gap: 8px; padding: 8px; border: 1px solid var(--borde); border-radius: 7px; margin-bottom: 7px; }
 .scn-row .nm { flex: 1; font-weight: 600; }
 .scn-row .mt { font-size: 12px; color: var(--texto-suave); }
@@ -152,3 +154,33 @@ table.tbl td.num { font-family: 'Consolas', monospace; }
 
 .empty-state { text-align: center; color: var(--texto-suave); padding: 40px 20px; }
 .empty-state .big { font-size: 42px; }
+
+.error-boundary { max-width: 540px; margin: 60px auto; text-align: center; padding: 28px; background: var(--panel); border: 1px solid var(--borde); border-radius: 12px; box-shadow: var(--sombra); }
+.error-boundary .big { font-size: 46px; }
+.error-boundary h2 { color: var(--secundario); margin: 8px 0 10px; }
+.error-boundary .acciones { display: flex; gap: 10px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
+
+/* ---------- Impresión / reporte (V1-08) ----------
+   El botón "PDF" usa window.print(): acá se maqueta un reporte limpio del panel
+   de resultados (la vista activa), ocultando el chrome de edición. */
+@media print {
+  @page { margin: 14mm; }
+  body { background: #fff; font-size: 12px; }
+  /* Ocultar lo que es de edición/navegación: solo se imprime el reporte. */
+  .toolbar, .tabs, .col-form, .modal-bg, .btn-add,
+  .med-table button, .scn-row button { display: none !important; }
+  /* Header sobrio (predio + raza) en vez del banner con gradiente sticky. */
+  .header { position: static; background: #fff; color: var(--texto); box-shadow: none;
+    border-bottom: 2px solid var(--secundario); padding: 0 0 8px; }
+  .header h1 { color: var(--secundario); font-size: 18px; }
+  .header .sub, .header .raza-input label { color: var(--texto-suave); }
+  .header input { border: 1px solid var(--borde); color: var(--texto); }
+  /* Una sola columna a todo el ancho, sin alturas fijas ni scroll. */
+  .layout { display: block; }
+  .col-result { height: auto; overflow: visible; padding: 0; background: #fff; }
+  /* Sin sombras (ahorro de tinta) y evitar cortes feos entre páginas. */
+  .kpi-card, .chart-card, .section { box-shadow: none; break-inside: avoid; }
+  /* Mostrar el contenido de las secciones aunque estén colapsadas. */
+  .section > .body { display: block !important; }
+  .section > summary::before { display: none; }
+}

@@ -5,6 +5,10 @@ node_modules/
 dist/
 dist-single/
 
+# Paquete de release generado (regenerable con: npm run package)
+release/
+VERSION
+
 # Paquetes generados para compartir
 paquete-escritorio/
 paquete-web/
@@ -14,3 +18,8 @@ compartir/
 *.log
 *.tsbuildinfo
 .DS_Store
+
+# Artefactos de tooling local (no versionar)
+.bench_app.json
+.bench_app.log
+reviews.db

@@ -1,13 +1,15 @@
 import {
   PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, CartesianGrid,
 } from 'recharts'
-import type { Inputs, Resultados } from '../engine/types'
-import { fmtUSD, fmtNum, fmtPct } from '../utils/format'
+import type { Resultados } from '../engine/types'
+import { fmtUSD, fmtNum, fmtPct, round } from '../utils/format'
 
 const COLORS = ['#2d5016', '#8b7355', '#4a90e2', '#e0a800', '#27ae60', '#a0522d', '#7b68ee']
 
-export default function ResultadosPanel({ inp, r }: { inp: Inputs; r: Resultados }) {
+export default function ResultadosPanel({ r }: { r: Resultados }) {
   const signo = (n: number) => (n >= 0 ? 'pos' : 'neg')
+  // Total de comercialización (5 tributos/comisiones), calculado una sola vez.
+  const costoComercializacion = r.comisiones + r.imeba + r.inia + r.mevir + r.inac
 
   const ingresoData = [
     { name: 'Lana', value: Math.max(0, r.ingresoLana) },
@@ -19,14 +21,14 @@ export default function ResultadosPanel({ inp, r }: { inp: Inputs; r: Resultados
     { name: 'Esquila', value: r.costoEsquilaTotal },
     { name: 'Alimentación', value: r.costoAlimTotal },
     { name: 'Carneros', value: r.costoCarnerosTotal },
-    { name: 'Comercializ.', value: r.comisiones + r.imeba + r.inia + r.mevir + r.inac },
+    { name: 'Comercializ.', value: costoComercializacion },
     { name: 'Mano de obra', value: r.manoDeObra },
     { name: 'Renta+Contr.', value: r.renta + r.contribucion },
   ].filter((d) => d.value > 0)
 
   const margenCatData = r.filas
     .filter((f) => f.cantidad > 0.01)
-    .map((f) => ({ name: f.nombre, ug: round(f.ug) }))
+    .map((f) => ({ name: f.nombre, ug: round(f.ug, 2) }))
 
   const sinDatos = r.ingresoBruto === 0 && r.costosFijosTotal === 0
 
@@ -62,6 +64,7 @@ export default function ResultadosPanel({ inp, r }: { inp: Inputs; r: Resultados
         <h3>📈 Producción</h3>
         <div className="kpi-mini-grid">
           <div className="kpi-mini"><div className="v">{fmtNum(r.totalLanaKg, 0)}</div><div className="k">kg lana limpia/año</div></div>
+          <div className="kpi-mini"><div className="v">{fmtNum(r.lanaPorCab, 2)}</div><div className="k">kg lana / cabeza</div></div>
           <div className="kpi-mini"><div className="v">{fmtNum(r.superficieTotal ? r.totalLanaKg / r.superficieTotal : 0, 1)}</div><div className="k">kg lana / ha</div></div>
           <div className="kpi-mini"><div className="v">{fmtNum(r.micronajePonderado, 1)}</div><div className="k">micronaje pond. (µ)</div></div>
           <div className="kpi-mini"><div className="v">{fmtNum(r.totalAnimales, 0)}</div><div className="k">animales en stock</div></div>
@@ -76,7 +79,7 @@ export default function ResultadosPanel({ inp, r }: { inp: Inputs; r: Resultados
           <h4>Composición de Ingresos</h4>
           <ResponsiveContainer width="100%" height={210}>
             <PieChart>
-              <Pie data={ingresoData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} isAnimationActive={false} label={(e: any) => `${e.name} ${(e.percent * 100).toFixed(0)}%`}>
+              <Pie data={ingresoData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} isAnimationActive={false} label={(e: { name: string; percent: number }) => `${e.name} ${(e.percent * 100).toFixed(0)}%`}>
                 {ingresoData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
               </Pie>
               <Tooltip formatter={(v: number) => fmtUSD(v)} />
@@ -118,7 +121,7 @@ export default function ResultadosPanel({ inp, r }: { inp: Inputs; r: Resultados
         <div className="body" style={{ overflowX: 'auto' }}>
           <table className="tbl">
             <thead>
-              <tr><th>Categoría</th><th>Cant.</th><th>Lana kg/cab</th><th>Micras</th><th>UG</th><th>Sanidad/cab</th></tr>
+              <tr><th>Categoría</th><th>Cant.</th><th>Lana kg/cab</th><th>Micras</th><th>UG</th><th>Sanidad/cab</th><th>Esquila/cab</th><th>Alim/cab</th><th>Carnero/cab</th></tr>
             </thead>
             <tbody>
               {r.filas.filter((f) => f.cantidad > 0.01).map((f) => (
@@ -129,9 +132,12 @@ export default function ResultadosPanel({ inp, r }: { inp: Inputs; r: Resultados
                   <td className="num">{f.micras ? fmtNum(f.micras, 1) : '—'}</td>
                   <td className="num">{fmtNum(f.ug, 2)}</td>
                   <td className="num">{fmtUSD(f.costoSanidad, 2)}</td>
+                  <td className="num">{f.costoEsquila ? fmtUSD(f.costoEsquila, 2) : '—'}</td>
+                  <td className="num">{f.costoAlim ? fmtUSD(f.costoAlim, 2) : '—'}</td>
+                  <td className="num">{f.costoCarnero ? fmtUSD(f.costoCarnero, 2) : '—'}</td>
                 </tr>
               ))}
-              <tr className="total"><td>TOTAL</td><td className="num">{fmtNum(r.totalAnimales, 0)}</td><td className="num">{fmtNum(r.totalLanaKg, 0)} kg</td><td></td><td className="num">{fmtNum(r.totalUG, 1)}</td><td></td></tr>
+              <tr className="total"><td>TOTAL</td><td className="num">{fmtNum(r.totalAnimales, 0)}</td><td className="num">{fmtNum(r.totalLanaKg, 0)} kg</td><td></td><td className="num">{fmtNum(r.totalUG, 1)}</td><td></td><td></td><td></td><td></td></tr>
             </tbody>
           </table>
         </div>
@@ -149,7 +155,7 @@ export default function ResultadosPanel({ inp, r }: { inp: Inputs; r: Resultados
               <tr><td>Alimentación</td><td className="num">{fmtUSD(r.costoAlimTotal, 0)}</td></tr>
               <tr><td>Carneros (reposición)</td><td className="num">{fmtUSD(r.costoCarnerosTotal, 0)}</td></tr>
               <tr className="total"><td>Costos directos</td><td className="num">{fmtUSD(r.costosDirectosTotal, 0)}</td></tr>
-              <tr><td>Comisiones + IMEBA + INIA + MEVIR + INAC</td><td className="num">{fmtUSD(r.comisiones + r.imeba + r.inia + r.mevir + r.inac, 0)}</td></tr>
+              <tr><td>Comisiones + IMEBA + INIA + MEVIR + INAC</td><td className="num">{fmtUSD(costoComercializacion, 0)}</td></tr>
               <tr><td>Mano de obra</td><td className="num">{fmtUSD(r.manoDeObra, 0)}</td></tr>
               <tr><td>Renta + Contribución</td><td className="num">{fmtUSD(r.renta + r.contribucion, 0)}</td></tr>
               <tr className="total"><td>Costos fijos + comercialización</td><td className="num">{fmtUSD(r.costosFijosTotal, 0)}</td></tr>
@@ -170,6 +176,7 @@ export default function ResultadosPanel({ inp, r }: { inp: Inputs; r: Resultados
               <tr><td>IB / UG</td><td className="num">{fmtUSD(r.ibUG, 1)}</td></tr>
               <tr><td>Margen bruto</td><td className="num">{fmtUSD(r.margenBruto, 0)}</td></tr>
               <tr><td>Margen bruto / ha</td><td className="num">{fmtUSD(r.margenBrutoHa, 1)}</td></tr>
+              <tr><td>Ingreso de capital</td><td className="num">{fmtUSD(r.ingresoCapital, 0)}</td></tr>
               <tr><td>Precio lana aplicado</td><td className="num">{fmtUSD(r.precioLanaUSD, 2)}/kg</td></tr>
             </tbody>
           </table>
@@ -178,5 +185,3 @@ export default function ResultadosPanel({ inp, r }: { inp: Inputs; r: Resultados
     </div>
   )
 }
-
-function round(n: number) { return Math.round(n * 100) / 100 }

@@ -8,6 +8,19 @@ export function validar(inp: Inputs, r: Resultados): Aviso[] {
     a.push({ tipo: 'info', msg: 'Ingresá la cantidad de ovejas encarneradas para comenzar.' })
   if (inp.precioCarneBase <= 0 && inp.micronaje <= 0)
     a.push({ tipo: 'warn', msg: 'Completá precios (carne / micronaje de lana) para obtener resultados.' })
+  // Avisos de inputs que rompen el cálculo sin previo aviso (V1-09).
+  // Solo cuando el usuario ya está cargando datos (ovejas > 0), para no hacer ruido en vacío.
+  const cargando = inp.ovejasEncarneradas > 0
+  if (cargando && inp.precioDolar <= 0 && (inp.salarioMensualUYU > 0 || inp.costoEsquilaUYU > 0))
+    a.push({ tipo: 'err', msg: 'Cotización del dólar en 0: los valores en UYU (salario, esquila) no se convierten correctamente. Ingresá UYU/USD.' })
+  if (cargando && inp.precioCarneBase > 0 && inp.rendimientoCanal <= 0)
+    a.push({ tipo: 'warn', msg: 'Rendimiento de canal en 0: el ingreso por carne queda anulado.' })
+  if (cargando && inp.supPropiedad + inp.supArrendada <= 0)
+    a.push({ tipo: 'warn', msg: 'Superficie total en 0: no se pueden calcular los indicadores por hectárea.' })
+  if (cargando && inp.senaladaBase <= 0)
+    a.push({ tipo: 'warn', msg: 'Señalada en 0: no se generan corderos (sin producción de carne de cordero).' })
+  if (inp.cantTrabajadores > 0 && inp.salarioMensualUYU <= 0)
+    a.push({ tipo: 'warn', msg: 'Hay trabajadores cargados pero el salario mensual es 0: la mano de obra queda en 0.' })
   if (inp.dotacionSegura > 1.5)
     a.push({ tipo: 'warn', msg: 'Dotación muy alta (>1,5 UG/ha). Verificar sostenibilidad del campo.' })
   const morts = [

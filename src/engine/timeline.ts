@@ -80,7 +80,6 @@ export function construirTimeline(inp: Inputs, r: Resultados): MesFlujo[] {
   }
 
   // ---- Carneros (reposición): en el mes de encarnerada ----
-  meses[0].cSanidad += 0 // (incluido en sanidad/estructura)
   const carneros = r.costoCarnerosTotal
   meses[0].cFijos += carneros // se trata como inversión puntual al inicio
 
