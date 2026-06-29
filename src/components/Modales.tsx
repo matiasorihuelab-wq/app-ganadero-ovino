@@ -14,7 +14,7 @@ export function ModalGuardar({ inp, onClose }: { inp: Inputs; onClose: () => voi
         <label>Nombre del escenario</label>
         <input autoFocus value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Ej: Merino Aust. 2024 Pesado" />
       </div>
-      <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}>
+      <div className="modal-actions">
         <button className="btn-ghost" onClick={onClose}>Cancelar</button>
         <button className="btn-pri" disabled={!nombre.trim()} onClick={() => { escenarioRepository.guardar(nombre.trim(), inp); onClose() }}>Guardar</button>
       </div>
@@ -38,11 +38,20 @@ export function ModalCargar({ onClose, onLoad }: { onClose: () => void; onLoad: 
           </div>
         )
       })}
-      <div style={{ textAlign: 'right', marginTop: 12 }}>
+      <div className="modal-actions">
         <button className="btn-ghost" onClick={onClose}>Cerrar</button>
       </div>
     </Backdrop>
   )
+}
+
+/** Una fila de la grilla de comparación A vs B. */
+interface FilaComparacion {
+  etiqueta: string
+  a: number
+  b: number
+  dec: number      // decimales a mostrar
+  moneda: boolean  // formatear como USD (true) o como cantidad (false)
 }
 
 export function ModalComparar({ actual, onClose }: { actual: Inputs; onClose: () => void }) {
@@ -52,17 +61,16 @@ export function ModalComparar({ actual, onClose }: { actual: Inputs; onClose: ()
   const rA = calcular(actual)
   const rB = b ? calcular(sanitizeInputs(b.inputs)) : null
 
-  // [etiqueta, A, B, decimales, esMoneda]
-  const filas: [string, number, number, number, boolean][] = rB
+  const filas: FilaComparacion[] = rB
     ? [
-        ['Ingreso bruto', rA.ingresoBruto, rB.ingresoBruto, 0, true],
-        ['Costos directos', rA.costosDirectosTotal, rB.costosDirectosTotal, 0, true],
-        ['Costos fijos', rA.costosFijosTotal, rB.costosFijosTotal, 0, true],
-        ['Margen bruto', rA.margenBruto, rB.margenBruto, 0, true],
-        ['Margen neto', rA.margenNeto, rB.margenNeto, 0, true],
-        ['Margen neto / ha', rA.margenNetoHa, rB.margenNetoHa, 1, true],
-        ['Lana (kg)', rA.totalLanaKg, rB.totalLanaKg, 0, false],
-        ['Animales', rA.totalAnimales, rB.totalAnimales, 0, false],
+        { etiqueta: 'Ingreso bruto', a: rA.ingresoBruto, b: rB.ingresoBruto, dec: 0, moneda: true },
+        { etiqueta: 'Costos directos', a: rA.costosDirectosTotal, b: rB.costosDirectosTotal, dec: 0, moneda: true },
+        { etiqueta: 'Costos fijos', a: rA.costosFijosTotal, b: rB.costosFijosTotal, dec: 0, moneda: true },
+        { etiqueta: 'Margen bruto', a: rA.margenBruto, b: rB.margenBruto, dec: 0, moneda: true },
+        { etiqueta: 'Margen neto', a: rA.margenNeto, b: rB.margenNeto, dec: 0, moneda: true },
+        { etiqueta: 'Margen neto / ha', a: rA.margenNetoHa, b: rB.margenNetoHa, dec: 1, moneda: true },
+        { etiqueta: 'Lana (kg)', a: rA.totalLanaKg, b: rB.totalLanaKg, dec: 0, moneda: false },
+        { etiqueta: 'Animales', a: rA.totalAnimales, b: rB.totalAnimales, dec: 0, moneda: false },
       ]
     : []
 
@@ -79,17 +87,17 @@ export function ModalComparar({ actual, onClose }: { actual: Inputs; onClose: ()
       {rB ? (
         <div className="cmp-grid">
           <div className="h">Indicador</div><div className="h">A (actual)</div><div className="h">B</div><div className="h">Δ</div>
-          {filas.map(([lbl, va, vb, dec, money]) => {
-            const delta = va - vb
+          {filas.map(({ etiqueta, a, b, dec, moneda }) => {
+            const delta = a - b
             const cls = delta >= 0 ? 'pos' : 'neg'
-            const fmt = (n: number) => (money ? fmtUSD(n, dec) : fmtNum(n, dec))
+            const fmt = (n: number) => (moneda ? fmtUSD(n, dec) : fmtNum(n, dec))
             return (
-              <Cells key={lbl} lbl={lbl} a={fmt(va)} b={fmt(vb)} d={(delta >= 0 ? '+' : '') + fmtNum(delta, dec)} cls={cls} />
+              <Cells key={etiqueta} lbl={etiqueta} a={fmt(a)} b={fmt(b)} d={(delta >= 0 ? '+' : '') + fmtNum(delta, dec)} cls={cls} />
             )
           })}
         </div>
       ) : <p className="hint">Guardá al menos un escenario para comparar.</p>}
-      <div style={{ textAlign: 'right', marginTop: 12 }}>
+      <div className="modal-actions">
         <button className="btn-ghost" onClick={onClose}>Cerrar</button>
       </div>
     </Backdrop>
