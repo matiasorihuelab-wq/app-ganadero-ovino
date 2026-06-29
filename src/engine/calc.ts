@@ -110,6 +110,8 @@ export function calcular(inp: Inputs): Resultados {
   const F34 = F23 * 1.05
 
   // ---------- UG (unidades ganaderas) por categoría ----------
+  // TODO(excel): pesos de UG/faena hardcodeados como "estándar (modelo)". Verificar
+  // contra el Excel definitivo si son celdas editables; de serlo, mover a Inputs. (V1-04)
   const E12 = 40, E13 = 40, E15 = 42, E17 = 40 // pesos estándar (modelo)
   const G23 = (-0.0000666667 * B3 ** 2 + 0.009 * B3 - 0.1233) * C23
   const ugCordero = (peso: number, c: number) =>
@@ -173,6 +175,8 @@ export function calcular(inp: Inputs): Resultados {
   const AO24 = ((100 / 180) * inp.costoVerdeoHa) / 15 // verdeos por cab
   const alimSegun = (sis: string) =>
     sis === 'Verdeos' ? AO24 : sis === 'Supl. sobre CN' ? AK19 : 0
+  // TODO(excel): umbral 0.85 es una aproximación; confirmar la condición real de
+  // suplementación de gestantes contra el Excel definitivo. (V1-03)
   const AD3 = B4 > 0.85 ? AK19 : 0 // gestantes (aprox.)
   const AD5 = alimSegun(inp.sistemaEngordeCorderos)
   const AD8 = alimSegun(inp.sistemaEngordeBgos)
@@ -224,6 +228,9 @@ export function calcular(inp: Inputs): Resultados {
   const C39 = C45 * 0.9 * V4 + C45 * 0.1 * E20 // Ingreso lana
 
   // ---------- Precios de carne derivados (G) ----------
+  // TODO(excel): G11/G15/G16 se derivan de G13 por coeficientes fijos (0.45, -0.5,
+  // +0.15) y E11/E14/E16 son pesos hardcodeados. Confirmar contra el Excel si esas
+  // celdas son independientes/editables. (V1-04)
   const G13 = inp.precioCarneBase
   const G11 = G13 * 0.45 // cordero destete (en pie)
   const G12 = G13, G14 = G13, G17 = G13
@@ -278,6 +285,10 @@ export function calcular(inp: Inputs): Resultados {
   const P21 =
     G8 * (((inp.salarioMensualUYU * inp.aguinaldoFactor) * inp.cargasSociales) / L10)
   const C52 = E6 ? G35 / E6 : 0 // dotación ovinos
+  // TODO(excel): coherencia de monedas. P21 (mano de obra) divide por L10 (UYU->USD),
+  // pero rentaHa/contribucionHa se usan SIN dividir (se asumen ya en USD/ha). Si en el
+  // Excel están en UYU, P22/P23 quedarían inflados ~L10x. Confirmar y no tocar hasta
+  // tener el Excel. (M4) — hoy sin validar (el preset tiene supArrendada=0 => P22=0).
   const P22 = B2 ? (C52 / B2) * (E5 * inp.rentaHa) : 0 // renta
   const P23 = (E3 > 0 ? E3 * inp.contribucionHa : 0) * (B2 ? C52 / B2 : 0) // contribución
   const P26 = P16 + P17 + P18 + P19 + P20 + P21 + P22 + P23

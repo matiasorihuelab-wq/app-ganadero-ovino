@@ -43,6 +43,9 @@ export default function Formulario({ inp, set }: { inp: Inputs; set: (p: Partial
       {/* 2. Configuración productiva */}
       <Section title="2 · Configuración Productiva">
         <SelectField label="Categoría de venta" value={inp.categoriaVenta} onChange={(v) => set({ categoriaVenta: v })} options={CATEGORIAS} />
+        {/* TODO(excel): la señalada se edita como % pero el modelo la usa como "corderos
+            por oveja" y puede superar 1,0 (ej. 1,2 = 120%). Confirmar unidad/escala con
+            el Excel; mostrar >100% como % puede confundir. (M2) */}
         <NumberField label="Señalada / corderos por oveja" value={inp.senaladaBase} onChange={(v) => set({ senaladaBase: v })} pct suffix="%" hint="marcación lograda" />
         <div className="grid2">
           <SelectField label="Engorde de corderos" value={inp.sistemaEngordeCorderos} onChange={(v) => set({ sistemaEngordeCorderos: v })} options={SISTEMAS} />
