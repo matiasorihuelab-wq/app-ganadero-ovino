@@ -124,6 +124,14 @@ El cálculo es **síncrono y en tiempo real**: cada cambio en `Inputs` recalcula
 
 ## Limitaciones conocidas y deuda técnica
 
+- **`calcular()` es una función monolítica (~330 líneas) con variables nombradas por
+  celda del Excel (`B2`, `C23`…).** Es la mayor deuda de mantenibilidad del proyecto,
+  pero su refactor (descomponer en funciones puras por bloque, extraer constantes del
+  modelo) está **deliberadamente diferido**: (1) el motor está congelado hasta validar
+  contra el Excel definitivo; (2) la secuencia correcta es Excel → ampliar tests a las
+  6 categorías de venta → recién entonces descomponer, usando los tests como red. Hacerlo
+  antes arriesgaría la fidelidad ya validada sin beneficio inmediato y habría que rehacer
+  parte tras los ajustes del Excel. Decisión consciente de costo/beneficio, no omisión.
 - **Vulnerabilidades dev-only en `esbuild`/`vite`** (`npm audit`: 1 moderate, 1 high).
   Afectan únicamente al **servidor de desarrollo** local, no al artefacto de producción
   (`dist/`, que no incluye Vite/esbuild). El fix obliga a **Vite 5 → 8** (cambio mayor
