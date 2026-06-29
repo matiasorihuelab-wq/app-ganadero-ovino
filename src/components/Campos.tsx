@@ -1,4 +1,5 @@
 import { useId, type ReactNode } from 'react'
+import { round } from '../utils/format'
 
 interface NumProps {
   label: string
@@ -93,9 +94,4 @@ export function Section({ title, defaultOpen, count, children }: { title: string
       <div className="body">{children}</div>
     </details>
   )
-}
-
-function round(n: number, d: number) {
-  const f = 10 ** d
-  return Math.round(n * f) / f
 }

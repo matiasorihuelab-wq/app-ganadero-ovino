@@ -2,12 +2,14 @@ import {
   PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, CartesianGrid,
 } from 'recharts'
 import type { Resultados } from '../engine/types'
-import { fmtUSD, fmtNum, fmtPct } from '../utils/format'
+import { fmtUSD, fmtNum, fmtPct, round } from '../utils/format'
 
 const COLORS = ['#2d5016', '#8b7355', '#4a90e2', '#e0a800', '#27ae60', '#a0522d', '#7b68ee']
 
 export default function ResultadosPanel({ r }: { r: Resultados }) {
   const signo = (n: number) => (n >= 0 ? 'pos' : 'neg')
+  // Total de comercialización (5 tributos/comisiones), calculado una sola vez.
+  const costoComercializacion = r.comisiones + r.imeba + r.inia + r.mevir + r.inac
 
   const ingresoData = [
     { name: 'Lana', value: Math.max(0, r.ingresoLana) },
@@ -19,14 +21,14 @@ export default function ResultadosPanel({ r }: { r: Resultados }) {
     { name: 'Esquila', value: r.costoEsquilaTotal },
     { name: 'Alimentación', value: r.costoAlimTotal },
     { name: 'Carneros', value: r.costoCarnerosTotal },
-    { name: 'Comercializ.', value: r.comisiones + r.imeba + r.inia + r.mevir + r.inac },
+    { name: 'Comercializ.', value: costoComercializacion },
     { name: 'Mano de obra', value: r.manoDeObra },
     { name: 'Renta+Contr.', value: r.renta + r.contribucion },
   ].filter((d) => d.value > 0)
 
   const margenCatData = r.filas
     .filter((f) => f.cantidad > 0.01)
-    .map((f) => ({ name: f.nombre, ug: round(f.ug) }))
+    .map((f) => ({ name: f.nombre, ug: round(f.ug, 2) }))
 
   const sinDatos = r.ingresoBruto === 0 && r.costosFijosTotal === 0
 
@@ -153,7 +155,7 @@ export default function ResultadosPanel({ r }: { r: Resultados }) {
               <tr><td>Alimentación</td><td className="num">{fmtUSD(r.costoAlimTotal, 0)}</td></tr>
               <tr><td>Carneros (reposición)</td><td className="num">{fmtUSD(r.costoCarnerosTotal, 0)}</td></tr>
               <tr className="total"><td>Costos directos</td><td className="num">{fmtUSD(r.costosDirectosTotal, 0)}</td></tr>
-              <tr><td>Comisiones + IMEBA + INIA + MEVIR + INAC</td><td className="num">{fmtUSD(r.comisiones + r.imeba + r.inia + r.mevir + r.inac, 0)}</td></tr>
+              <tr><td>Comisiones + IMEBA + INIA + MEVIR + INAC</td><td className="num">{fmtUSD(costoComercializacion, 0)}</td></tr>
               <tr><td>Mano de obra</td><td className="num">{fmtUSD(r.manoDeObra, 0)}</td></tr>
               <tr><td>Renta + Contribución</td><td className="num">{fmtUSD(r.renta + r.contribucion, 0)}</td></tr>
               <tr className="total"><td>Costos fijos + comercialización</td><td className="num">{fmtUSD(r.costosFijosTotal, 0)}</td></tr>
@@ -183,5 +185,3 @@ export default function ResultadosPanel({ r }: { r: Resultados }) {
     </div>
   )
 }
-
-function round(n: number) { return Math.round(n * 100) / 100 }
