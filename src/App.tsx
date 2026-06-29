@@ -35,7 +35,7 @@ export default function App() {
         </div>
         <div className="spacer" />
         <div className="toolbar">
-          <button className="btn-sec" onClick={() => setInp(INPUTS_EJEMPLO)}>Cargar ejemplo</button>
+          <button className="btn-sec" onClick={() => { const dirty = JSON.stringify(inp) !== JSON.stringify(INPUTS_VACIO); if (!dirty || confirm('¿Cargar el ejemplo y reemplazar los datos actuales?')) setInp(INPUTS_EJEMPLO) }}>Cargar ejemplo</button>
           <button className="btn-sec" onClick={() => { if (confirm('¿Vaciar todos los campos?')) setInp(INPUTS_VACIO) }}>Limpiar</button>
           <button className="btn-sec" onClick={() => setModal('guardar')}>💾 Guardar</button>
           <button className="btn-sec" onClick={() => setModal('cargar')}>📂 Cargar</button>
@@ -55,7 +55,7 @@ export default function App() {
             <button className={vista === 'timeline' ? 'tab on' : 'tab'} onClick={() => setVista('timeline')}>📅 Evolución</button>
             <button className={vista === 'neb' ? 'tab on' : 'tab'} onClick={() => setVista('neb')}>🔥 Energético</button>
           </div>
-          {avisos.length > 0 && vista === 'dashboard' && (
+          {avisos.length > 0 && (
             <div className="avisos">
               {avisos.map((a, i) => (
                 <div key={i} className={'aviso ' + a.tipo}>
