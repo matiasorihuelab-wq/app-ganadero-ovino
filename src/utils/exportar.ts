@@ -25,7 +25,7 @@ export function exportarCSV(inp: Inputs, r: Resultados) {
     ['Total animales en stock', r.totalAnimales.toFixed(0)],
     [],
     ['CATEGORÍAS', 'Cantidad', 'Lana kg/cab', 'Micras', 'Sanidad/cab', 'Esquila/cab'],
-    ...r.filas.map((f) => [f.nombre, f.cantidad.toFixed(1), f.pesoLana.toFixed(2), f.micras.toFixed(1), f.costoSanidad.toFixed(2), f.costoEsquila.toFixed(2)]),
+    ...r.filas.map((f) => [f.nombre, f.cantidad.toFixed(1), f.pesoLana.toFixed(2), f.micras ? f.micras.toFixed(1) : '', f.costoSanidad.toFixed(2), f.costoEsquila.toFixed(2)]),
     [],
     ['INGRESOS'],
     ['Ingreso lana (USD)', r.ingresoLana.toFixed(2)],
