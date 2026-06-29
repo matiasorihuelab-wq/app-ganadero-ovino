@@ -14,6 +14,9 @@ export default function Neb({ inp, r }: { inp: Inputs; r: Resultados }) {
     <div>
       <div className="kpi-card">
         <h3>🔥 Análisis Energético (NEB)</h3>
+        <p className="hint" style={{ marginTop: -6, marginBottom: 10 }}>
+          Estimación propia de la app (modelo energético de referencia para ovinos); no proviene del Excel.
+        </p>
         {sinPeso && (
           <div className="aviso info" style={{ marginBottom: 12 }}>
             <span>🟡</span>
@@ -49,7 +52,7 @@ export default function Neb({ inp, r }: { inp: Inputs; r: Resultados }) {
           <table className="tbl">
             <thead>
               <tr>
-                <th>Categoría</th><th>Cant.</th><th>PV (kg)</th><th>Mant.</th><th>+Frío</th><th>+Gan.</th>
+                <th>Categoría</th><th>Cant.</th><th>PV (kg)</th><th>Mant.</th><th>+Frío</th><th>+Cond.</th><th>+Gan.</th>
                 <th>NEB total</th><th>UF</th><th>Ración kg MS</th><th>Costo/día</th>
               </tr>
             </thead>
@@ -61,6 +64,7 @@ export default function Neb({ inp, r }: { inp: Inputs; r: Resultados }) {
                   <td className="num">{fmtNum(f.pesoVivo, 0)}</td>
                   <td className="num">{fmtNum(f.mantenimiento, 2)}</td>
                   <td className="num">{fmtNum(f.climatico, 2)}</td>
+                  <td className="num">{fmtNum(f.condicion, 2)}</td>
                   <td className="num">{fmtNum(f.ganancia, 2)}</td>
                   <td className="num"><strong>{fmtNum(f.total, 2)}</strong></td>
                   <td className="num">{fmtNum(f.uf, 2)}</td>
@@ -69,7 +73,7 @@ export default function Neb({ inp, r }: { inp: Inputs; r: Resultados }) {
                 </tr>
               ))}
               {res.filas.length === 0 && (
-                <tr><td colSpan={10} style={{ textAlign: 'center', color: 'var(--texto-suave)' }}>Sin datos: cargá peso adulto y rebaño.</td></tr>
+                <tr><td colSpan={11} style={{ textAlign: 'center', color: 'var(--texto-suave)' }}>Sin datos: cargá peso adulto y rebaño.</td></tr>
               )}
             </tbody>
           </table>
