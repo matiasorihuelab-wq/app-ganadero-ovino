@@ -87,7 +87,7 @@ export default function App() {
           <div className="tabs">
             <button className={vista === 'dashboard' ? 'tab on' : 'tab'} onClick={() => setVista('dashboard')}>📊 Dashboard</button>
             <button className={vista === 'timeline' ? 'tab on' : 'tab'} onClick={() => setVista('timeline')}>📅 Evolución</button>
-            <button className={vista === 'nutricion' ? 'tab on' : 'tab'} onClick={() => setVista('nutricion')}>🥗 Requerimientos</button>
+            <button className={vista === 'nutricion' ? 'tab on' : 'tab'} onClick={() => setVista('nutricion')} title="Módulo en construcción">🚧 Requerimientos</button>
           </div>
           {avisos.length > 0 && (
             <div className="avisos">

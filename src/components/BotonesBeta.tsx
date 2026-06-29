@@ -19,9 +19,9 @@ export default function BotonesBeta() {
       <button
         className="btn-sec"
         onClick={abrirReporte}
-        title="Abrir el formulario de reporte en una pestaña nueva"
+        title="Reportá un error o enviá una sugerencia/mejora — abre el formulario en una pestaña nueva"
       >
-        🐞 Reportar un problema
+        🐞 Reportar o sugerir
       </button>
       <button
         className="btn-sec"

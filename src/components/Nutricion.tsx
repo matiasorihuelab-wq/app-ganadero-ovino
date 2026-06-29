@@ -43,6 +43,16 @@ export default function Nutricion() {
 
   return (
     <div>
+      {/* Módulo congelado para la beta: claramente identificado como en construcción. */}
+      <div className="aviso warn" style={{ marginBottom: 12 }}>
+        <span>🚧</span>
+        <span>
+          <strong>Módulo en construcción.</strong> Requerimientos Nutricionales está en
+          desarrollo: todavía no tiene cargadas las tablas oficiales. Esto es una vista previa
+          de la estructura; los valores aún no están disponibles. Lo retomaremos más adelante.
+        </span>
+      </div>
+
       {/* Animal a consultar */}
       <div className="kpi-card">
         <h3>🐑 Animal a consultar</h3>
