@@ -52,6 +52,7 @@ export function exportarCSV(inp: Inputs, r: Resultados) {
     [],
     ['RESULTADO'],
     ['Margen bruto (USD)', r.margenBruto.toFixed(2)],
+    ['Ingreso de capital (USD)', r.ingresoCapital.toFixed(2)],
     ['Margen neto (USD)', r.margenNeto.toFixed(2)],
     ['Margen neto / ha', r.margenNetoHa.toFixed(2)],
     ['Margen neto / oveja madre', r.margenNetoPorOveja.toFixed(2)],

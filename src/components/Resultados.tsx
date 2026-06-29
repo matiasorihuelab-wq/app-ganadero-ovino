@@ -170,6 +170,7 @@ export default function ResultadosPanel({ r }: { r: Resultados }) {
               <tr><td>IB / UG</td><td className="num">{fmtUSD(r.ibUG, 1)}</td></tr>
               <tr><td>Margen bruto</td><td className="num">{fmtUSD(r.margenBruto, 0)}</td></tr>
               <tr><td>Margen bruto / ha</td><td className="num">{fmtUSD(r.margenBrutoHa, 1)}</td></tr>
+              <tr><td>Ingreso de capital</td><td className="num">{fmtUSD(r.ingresoCapital, 0)}</td></tr>
               <tr><td>Precio lana aplicado</td><td className="num">{fmtUSD(r.precioLanaUSD, 2)}/kg</td></tr>
             </tbody>
           </table>
