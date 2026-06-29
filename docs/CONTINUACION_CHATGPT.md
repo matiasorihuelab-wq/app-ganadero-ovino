@@ -13,6 +13,8 @@ establecimiento **ovino**, replicando fielmente una planilla Excel de referencia
 backend; datos en `localStorage`. Se distribuye como Web/PWA y como archivo único offline.
 
 - **Versión:** `1.0.0-rc.3` · etiqueta visible **RC3** · estado **Beta cerrada**.
+- **PUBLICADA y en línea:** https://matiasorihuelab-wq.github.io/app-ganadero-ovino/
+  (repo público, GitHub Pages vía Actions, deploy automático en cada push a `main`).
 - **Rama de trabajo:** `feat/v1-funcionalidad`. **Rama de distribución:** `main`.
 - **Calidad (todo verde):** lint, typecheck, test (48), validate (18/18 motor vs Excel),
   build, package. CI en cada push/PR.
@@ -88,8 +90,8 @@ UI (React)  ──►  motor económico (engine)        ──►  Resultados (d
 ## 7. Pendientes priorizados
 
 1. **(Beta)** Crear el Google Forms y pegar su URL en `BUG_REPORT_URL` (`src/bug-report.ts`).
-2. **(Beta)** Habilitar GitHub Pages (`main` → Settings → Pages → GitHub Actions; quizá Pro).
-3. **(Calidad)** Mejorar foco de teclado (`:focus-visible`) para accesibilidad.
+   *(Único pendiente para activar el botón de reporte; la app ya está publicada.)*
+2. **(Calidad)** Mejorar foco de teclado (`:focus-visible`) para accesibilidad.
 4. **(Motor)** Auditoría completa contra el Excel.
 5. **(Nutrición, cuando se descongele)** Cargar tablas NRC + análisis de forraje + balance.
 
@@ -136,7 +138,8 @@ release/         # (generado por npm run package) paquete de distribución, giti
 2. **No “descongelar” el módulo nutricional** sin instrucción explícita: hoy es
    **"En construcción"**, sin lógica/tablas/providers nuevos.
 3. **No agregar dependencias pesadas** sin justificación.
-4. **Privacidad:** el repositorio es **privado**; no publicar ni compartir el código.
+4. **Privacidad de datos:** los datos del usuario son **locales** (`localStorage`); no se
+   suben a ningún servidor. *(El repositorio es **público** desde la publicación de la beta.)*
 5. **Verde antes de avanzar:** lint + typecheck + test + validate + build en CI.
 6. **Datos nutricionales sin fuente = prohibidos** (cada fila lleva referencia bibliográfica).
 
@@ -171,8 +174,8 @@ release/         # (generado por npm run package) paquete de distribución, giti
 - El **service worker** se registra solo en PROD y sobre http(s) (`./sw.js`), estrategia
   *network-first* en navegación (los usuarios online reciben la versión nueva).
 - Publicación automática vía `.github/workflows/deploy-pages.yml` (publica `release/web`).
-- **Repo privado:** Pages público puede requerir **GitHub Pro** (o repo público, o
-  Netlify/Vercel). URL pública: `https://matiasorihuelab-wq.github.io/app-ganadero-ovino/`.
+- **Publicado:** repo **público**, Pages **habilitado** (Source: GitHub Actions, gratuito).
+  URL pública en línea: `https://matiasorihuelab-wq.github.io/app-ganadero-ovino/`.
 - Guía completa: [DEPLOY_GITHUB_PAGES.md](DEPLOY_GITHUB_PAGES.md) y [BETA_READY.md](BETA_READY.md).
 
 ## 15. Funcionamiento del sistema de reportes
@@ -188,8 +191,8 @@ release/         # (generado por npm run package) paquete de distribución, giti
 
 ## 16. Próximos pasos recomendados
 
-1. **Lanzar la beta:** crear el formulario, pegar la URL, habilitar Pages, compartir el
-   enlace + `BETA_TEST.md` con los técnicos del SUL.
+1. **Lanzar la beta:** la app **ya está publicada**; crear el formulario, pegar la URL en
+   `BUG_REPORT_URL` y compartir el enlace + `BETA_TEST.md` con los técnicos del SUL.
 2. **Recoger feedback** unas semanas; priorizar fixes de UX/textos (sin tocar el motor).
 3. **Auditoría del motor** contra el Excel (todas las categorías).
 4. **Descongelar nutrición** (cuando se decida): cargar tablas NRC → análisis de forraje →

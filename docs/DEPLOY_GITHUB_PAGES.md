@@ -4,23 +4,19 @@ Guía paso a paso para publicar la app como un enlace público mediante **GitHub
 con publicación **automática** vía GitHub Actions. Pensada para que cualquier técnico
 pueda repetir el proceso.
 
-> **El repositorio sigue privado.** Lo que se publica es **solo la app compilada**
-> (`release/web`), no el código fuente.
+## ✅ Estado: PUBLICADO
 
-## ⚠️ Antes de empezar: Pages en repo privado
+La app **ya está publicada** y en línea:
 
-El repositorio es **privado**. Publicar un sitio de Pages **público** desde un repo
-privado **puede requerir un plan pago** (GitHub Pro/Team) según tu cuenta. Verificalo en
-**Settings → Pages**:
+```
+https://matiasorihuelab-wq.github.io/app-ganadero-ovino/
+```
 
-- Si te deja elegir **Source: GitHub Actions** → estás listo (seguí abajo).
-- Si te pide **actualizar el plan** → tenés tres opciones:
-  1. **GitHub Pro** (mantiene el repo privado y publica un sitio público) — recomendado.
-  2. Hacer el repositorio **público** (no recomendado en esta etapa).
-  3. Usar otro hosting de estáticos (Netlify/Vercel) que publica desde un repo privado en
-     su plan gratuito (mismo `release/web`).
+- El repositorio es **público**; GitHub Pages está **habilitado** con **Source: GitHub
+  Actions** (Pages gratuito en repos públicos — no requiere plan pago).
+- La publicación es **automática** en cada push a `main` (workflow `deploy-pages.yml`).
 
-El resto de esta guía asume la opción 1 o 2 (GitHub Pages).
+El resto de esta guía explica cómo publicar/actualizar/revertir.
 
 ## 1. Repositorio
 

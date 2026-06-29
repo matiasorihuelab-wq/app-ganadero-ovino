@@ -1,7 +1,9 @@
 # Beta cerrada — Guía de publicación y distribución (RC3)
 
-> Estado: **listo para beta cerrada** con técnicos del SUL. El motor económico está
-> congelado (validado 18/18). El módulo nutricional queda **🚧 En construcción**.
+> Estado: **PUBLICADA y en línea** para la beta cerrada con técnicos del SUL:
+> **https://matiasorihuelab-wq.github.io/app-ganadero-ovino/** (repo público, Pages vía
+> GitHub Actions). El motor económico está congelado (validado 18/18). El módulo
+> nutricional queda **🚧 En construcción**.
 
 ## Qué quedó terminado
 
@@ -18,9 +20,7 @@
 ## Qué quedó pendiente
 
 - **Pegar la URL real del formulario** en `src/bug-report.ts` (`BUG_REPORT_URL`, hoy
-  placeholder). Ver más abajo.
-- **Habilitar GitHub Pages** (puede requerir plan Pro en repo privado — ver
-  [DEPLOY_GITHUB_PAGES.md](DEPLOY_GITHUB_PAGES.md)).
+  placeholder). Ver más abajo. *(Único pendiente para que el botón de reporte funcione.)*
 - **Auditoría completa del motor** contra el Excel (todas las categorías) — etapa futura.
 - **Módulo nutricional** (tablas oficiales, análisis de forraje, balance) — congelado.
 - Mejora menor de **accesibilidad**: reforzar estilos de foco de teclado (`:focus-visible`).
@@ -36,9 +36,8 @@
 
 ## Cómo publicar en GitHub Pages
 
-1. **Settings → Pages → Source: GitHub Actions** (una sola vez). Si pide actualizar el
-   plan: el repo es privado y Pages público puede requerir **GitHub Pro** (alternativas:
-   repo público, o Netlify/Vercel con el mismo `release/web`).
+1. **Settings → Pages → Source: GitHub Actions** — **ya está configurado** (repo público,
+   Pages gratuito). No requiere ninguna acción adicional.
 2. Llevar el código a `main`:
    ```bash
    git checkout main && git merge feat/v1-funcionalidad && git push origin main
