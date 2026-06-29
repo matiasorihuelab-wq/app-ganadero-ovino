@@ -75,7 +75,7 @@ implementación. La UI depende de la interfaz, no de `localStorage` directamente
 - `local-storage-escenario-repository.ts` — el **adapter** sobre la Web Storage API;
   único código que toca `localStorage`. Recibe el `Storage` por parámetro (inyectable,
   testeable).
-- `draft-repository.ts` — segundo **puerto** `BorradorRepository` (`cargar` / `guardar`
+- `borrador-repository.ts` — segundo **puerto** `BorradorRepository` (`cargar` / `guardar`
   / `limpiar`) y su adapter, para el **borrador en curso** (autoguardado, clave
   `ganadero_borrador_v1`), independiente de los escenarios con nombre.
 - `index.ts` — **composition root**: los singletons `escenarioRepository` y

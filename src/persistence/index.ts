@@ -1,10 +1,10 @@
 import { createLocalStorageEscenarioRepository } from './local-storage-escenario-repository'
-import { createLocalStorageBorradorRepository } from './draft-repository'
+import { createLocalStorageBorradorRepository } from './borrador-repository'
 import type { EscenarioRepository } from './escenario-repository'
-import type { BorradorRepository } from './draft-repository'
+import type { BorradorRepository } from './borrador-repository'
 
 export type { Escenario, EscenarioRepository } from './escenario-repository'
-export type { BorradorRepository } from './draft-repository'
+export type { BorradorRepository } from './borrador-repository'
 
 /**
  * Composition root de la persistencia: instancias únicas que usa toda la app,

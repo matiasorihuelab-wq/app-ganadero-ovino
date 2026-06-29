@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { createLocalStorageEscenarioRepository } from './local-storage-escenario-repository'
-import { createLocalStorageBorradorRepository } from './draft-repository'
+import { createLocalStorageBorradorRepository } from './borrador-repository'
 import { INPUTS_VACIO, INPUTS_EJEMPLO } from '../engine/presets'
 
 /** Storage en memoria para tests (implementa la interfaz Web Storage). */
