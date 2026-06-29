@@ -5,6 +5,7 @@ import { INPUTS_VACIO, INPUTS_EJEMPLO, sanitizeInputs } from './engine/presets'
 import { validar } from './utils/validaciones'
 import { exportarCSV, exportarPDF } from './utils/exportar'
 import { borradorRepository } from './persistence'
+import { APP_VERSION, APP_VERSION_LABEL, APP_ESTADO } from './version'
 import Formulario from './components/Formulario'
 import ResultadosPanel from './components/Resultados'
 import Timeline from './components/Timeline'
@@ -57,7 +58,7 @@ export default function App() {
     <>
       <header className="header">
         <div>
-          <h1>🐑 Análisis de Rentabilidad Ovina</h1>
+          <h1>🐑 Análisis de Rentabilidad Ovina <span className="ver-badge" title={`${APP_ESTADO} · ${APP_VERSION}`}>{APP_VERSION_LABEL}</span></h1>
           <div className="sub">Template genérico · cualquier raza · cálculos en tiempo real</div>
         </div>
         <div className="raza-input">

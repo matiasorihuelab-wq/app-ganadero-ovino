@@ -35,6 +35,7 @@ body {
   flex-wrap: wrap;
 }
 .header h1 { font-size: 19px; margin: 0; font-weight: 700; letter-spacing: .3px; }
+.ver-badge { font-size: 10px; font-weight: 700; letter-spacing: .5px; vertical-align: middle; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.35); color: #fff; border-radius: 10px; padding: 1px 7px; margin-left: 6px; }
 .header .sub { opacity: .85; font-size: 12px; }
 .header .spacer { flex: 1; }
 .header .raza-input { display: flex; flex-direction: column; gap: 2px; }

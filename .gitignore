@@ -5,6 +5,10 @@ node_modules/
 dist/
 dist-single/
 
+# Paquete de release generado (regenerable con: npm run package)
+release/
+VERSION
+
 # Paquetes generados para compartir
 paquete-escritorio/
 paquete-web/

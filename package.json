@@ -1,12 +1,13 @@
 {
   "name": "app-ganadero-ovino",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.0-rc.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:single": "tsc -b && vite build --config vite.config.singlefile.ts",
+    "package": "node scripts/package-release.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
