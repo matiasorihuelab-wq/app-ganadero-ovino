@@ -153,6 +153,11 @@ table.tbl td.num { font-family: 'Consolas', monospace; }
 .empty-state { text-align: center; color: var(--texto-suave); padding: 40px 20px; }
 .empty-state .big { font-size: 42px; }
 
+.error-boundary { max-width: 540px; margin: 60px auto; text-align: center; padding: 28px; background: var(--panel); border: 1px solid var(--borde); border-radius: 12px; box-shadow: var(--sombra); }
+.error-boundary .big { font-size: 46px; }
+.error-boundary h2 { color: var(--secundario); margin: 8px 0 10px; }
+.error-boundary .acciones { display: flex; gap: 10px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
+
 /* ---------- Impresión / reporte (V1-08) ----------
    El botón "PDF" usa window.print(): acá se maqueta un reporte limpio del panel
    de resultados (la vista activa), ocultando el chrome de edición. */
