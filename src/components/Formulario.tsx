@@ -1,5 +1,5 @@
 import type { Inputs, CategoriaVenta, SistemaEngorde, ModoPrecios } from '../engine/types'
-import { NumberField, TextField, DateField, SelectField, Section } from './Campos'
+import { NumberField, TextField, DateField, SelectField, Section, aNumeroNoNeg } from './Campos'
 
 const CATEGORIAS: { value: CategoriaVenta; label: string }[] = [
   { value: 'Cord Dest', label: 'Cordero Destete' },
@@ -103,9 +103,9 @@ export default function Formulario({ inp, set }: { inp: Inputs; set: (p: Partial
             {inp.medicamentos.map((m, i) => (
               <tr key={i}>
                 <td><input className="txt" value={m.nombre} onChange={(e) => med(i, { nombre: e.target.value })} /></td>
-                <td><input type="number" value={m.precio} onChange={(e) => med(i, { precio: +e.target.value })} /></td>
-                <td><input type="number" value={m.volumen} onChange={(e) => med(i, { volumen: +e.target.value })} /></td>
-                <td><input type="number" step="0.001" value={m.dosis} onChange={(e) => med(i, { dosis: +e.target.value })} /></td>
+                <td><input type="number" min={0} value={m.precio} onWheel={(e) => e.currentTarget.blur()} onChange={(e) => med(i, { precio: aNumeroNoNeg(e.target.value) })} /></td>
+                <td><input type="number" min={0} value={m.volumen} onWheel={(e) => e.currentTarget.blur()} onChange={(e) => med(i, { volumen: aNumeroNoNeg(e.target.value) })} /></td>
+                <td><input type="number" min={0} step="0.001" value={m.dosis} onWheel={(e) => e.currentTarget.blur()} onChange={(e) => med(i, { dosis: aNumeroNoNeg(e.target.value) })} /></td>
                 <td><button type="button" className="btn-danger" title="Eliminar medicamento" onClick={() => set({ medicamentos: inp.medicamentos.filter((_, j) => j !== i) })}>✕</button></td>
               </tr>
             ))}
