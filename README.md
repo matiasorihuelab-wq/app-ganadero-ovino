@@ -5,10 +5,17 @@ productiva de un sistema ganadero **ovino**. Es un **template genérico**: sirve
 cualquier raza (Corriedale, Merino Dohne, Merino Australiano, etc.) y todos los campos
 arrancan en 0 / vacío. El usuario carga sus propios datos.
 
-El motor de cálculo replica **exactamente** la lógica de la planilla Excel de referencia
-(modelo Merino Australiano): cascada de categorías con mortandad acumulativa, producción
-de lana por micronaje (curva de precio), estructura de costos detallada (sanidad por
-medicamento, esquila, alimentación, comercialización) y márgenes finales.
+El motor de cálculo está diseñado para replicar **fielmente** la lógica de la planilla
+Excel de referencia (modelo Merino Australiano): cascada de categorías con mortandad
+acumulativa, producción de lana por micronaje (curva de precio), estructura de costos
+detallada (sanidad por medicamento, esquila, alimentación, comercialización) y márgenes
+finales. Hoy coincide con el Excel en **18 valores del escenario de ejemplo**; la
+**auditoría de fidelidad completa** (todas las categorías) está pendiente.
+
+> **Estado: Release Candidate (RC1) — baseline congelada.** El software está estabilizado
+> y la arquitectura congelada. El único trabajo pendiente es la **auditoría del motor
+> contra el Excel oficial**. Antes de cualquier cambio del motor, leé
+> [docs/BASELINE_RC1.md](docs/BASELINE_RC1.md) y [docs/CHANGE_POLICY.md](docs/CHANGE_POLICY.md).
 
 ## Cómo correr
 
@@ -18,6 +25,7 @@ npm run dev           # servidor de desarrollo en http://localhost:5174
 npm run build         # build web/PWA en /dist (para publicar online)
 npm run build:single  # único HTML autocontenido en /dist-single (doble clic, offline)
 npm run preview       # previsualiza el build /dist localmente
+npm run package       # arma el paquete de distribución en /release (RC1)
 ```
 
 Detalle de cada formato (cuándo usar cada uno, limitaciones, recomendación):
@@ -36,15 +44,15 @@ La CI (GitHub Actions) corre todo esto en cada push y Pull Request.
 
 ## Verificación de fórmulas (QA)
 
-El archivo `scripts/validate.ts` carga el preset de ejemplo (valores exactos del Excel)
-y compara 18 resultados clave contra los números que produce el Excel:
+`npm run validate` (o `npm test`) carga el preset de ejemplo y compara 18 resultados
+clave contra los números del Excel. Los valores esperados viven en
+`src/engine/__tests__/excel-fixtures.ts` (fuente única, compartida por la suite Vitest
+y el script de validación).
 
-```bash
-node --experimental-strip-types scripts/validate.ts
-```
-
-Todos los valores coinciden con precisión < 1e-6 (ingresos, costos directos, costos
-fijos, margen bruto/neto, lana, micronaje ponderado, UG, dotación, etc.).
+Todos coinciden con precisión < 1e-6 (ingresos, costos directos, costos fijos, margen
+bruto/neto, lana, micronaje ponderado, UG, dotación, etc.) **para el escenario de
+ejemplo** (`Cord Dest`). La validación del resto de categorías es parte de la auditoría
+pendiente (ver [docs/excel-audit/](docs/excel-audit/)).
 
 ## Estructura
 
@@ -61,12 +69,14 @@ src/
     Campos.tsx       # inputs reutilizables
   persistence/       # puertos/adapters de persistencia (localStorage)
     escenario-repository.ts        # escenarios con nombre
-    draft-repository.ts            # autoguardado del borrador actual
+    borrador-repository.ts         # autoguardado del borrador actual
   utils/
     format.ts        # formato USD / números / %
     validaciones.ts  # avisos y advertencias
     exportar.ts      # exportar CSV / PDF (print)
-docs/                # vision, architecture, adr/, distribucion, v1-backlog
+  version.ts         # versión visible de la app (RC1)
+docs/                # vision, architecture, distribucion, v1-backlog, production-review,
+                     # BASELINE_RC1, CHANGE_POLICY, adr/, usuario/ (manual), excel-audit/
 ```
 
 ## Funcionalidades

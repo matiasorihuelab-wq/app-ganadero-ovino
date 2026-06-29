@@ -151,8 +151,10 @@ src/
   components/    # UI React (incluye ErrorBoundary)
   persistence/   # puertos EscenarioRepository + BorradorRepository + adapters
   utils/         # presentación: format, validaciones, exportar
-  App.tsx, main.tsx, styles.css
-scripts/         # validate.ts (motor vs Excel), gen-icons.mjs
-docs/            # vision.md, architecture.md, distribucion.md, v1-backlog.md, adr/
+  App.tsx, main.tsx, styles.css, version.ts
+scripts/         # validate.ts (motor vs Excel), package-release.mjs, gen-icons.mjs
+docs/            # vision, architecture, distribucion, v1-backlog, production-review,
+                 # BASELINE_RC1, CHANGE_POLICY, adr/, usuario/, excel-audit/
+release/         # (generado por npm run package) paquete de distribución, gitignored
 .github/workflows/ci.yml
 ```
