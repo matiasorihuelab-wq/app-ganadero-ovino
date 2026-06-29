@@ -2,12 +2,13 @@ import { useMemo, useState } from 'react'
 import { NumberField, SelectField } from './Campos'
 import { fmtNum } from '../utils/format'
 import { requirementProvider, type IdCategoria } from '../nutrition/requirements'
-import { calcularRequerimiento, type AnalisisForraje } from '../nutrition/calcular'
+import { definicionNutriente } from '../nutrition/nutrientes'
 
 // ============================================================================
-//  Requerimientos Nutricionales.
-//  Consulta requerimientos OFICIALES (NRC y, en el futuro, INRA/AFRC/CSIRO) vía
-//  el provider. No modela ni estima: solo consulta y balancea contra el forraje.
+//  Requerimientos Nutricionales — motor de CONSULTA.
+//  No calcula ni modela: consulta los requerimientos oficiales (NRC y, en el futuro,
+//  INRA/AFRC/CSIRO) vía el provider y los muestra. El análisis del forraje y el balance
+//  (oferta vs requerimiento) son etapas futuras: la arquitectura ya está preparada.
 // ============================================================================
 
 export default function Nutricion() {
@@ -16,59 +17,63 @@ export default function Nutricion() {
   const [catId, setCatId] = useState<IdCategoria>(categorias[0].id)
   const cat = categorias.find((c) => c.id === catId) ?? categorias[0]
   const [estadoId, setEstadoId] = useState(cat.estados[0].id)
+  const estado = cat.estados.find((e) => e.id === estadoId) ?? cat.estados[0]
+  const [nivelId, setNivelId] = useState('')
   const [pesoVivo, setPesoVivo] = useState(0)
-  const [cantidad, setCantidad] = useState(0)
-  const [forraje, setForraje] = useState<AnalisisForraje>({ emMcalKgMs: 0, pbPorc: 0, fdnPorc: 0, fdaPorc: 0 })
-  const setF = (p: Partial<AnalisisForraje>) => setForraje((prev) => ({ ...prev, ...p }))
+
+  // Nivel productivo: solo "cuando corresponda" (si el estado lo declara).
+  const niveles = estado.nivelesProductivos ?? []
+  const nivelActivo = niveles.length ? (niveles.find((n) => n.id === nivelId)?.id ?? niveles[0].id) : undefined
 
   const cambiarCategoria = (id: IdCategoria) => {
     setCatId(id)
     const nueva = categorias.find((c) => c.id === id) ?? categorias[0]
     setEstadoId(nueva.estados[0].id)
+    setNivelId('')
+  }
+  const cambiarEstado = (id: string) => {
+    setEstadoId(id)
+    setNivelId('')
   }
 
-  const res = useMemo(
-    () => calcularRequerimiento(requirementProvider, { categoria: catId, estado: estadoId, pesoVivoKg: pesoVivo }, cantidad, forraje),
-    [catId, estadoId, pesoVivo, cantidad, forraje],
+  const req = useMemo(
+    () => requirementProvider.requerimiento({ categoria: catId, estado: estadoId, pesoVivoKg: pesoVivo, nivelProductivo: nivelActivo }),
+    [catId, estadoId, pesoVivo, nivelActivo],
   )
 
   return (
     <div>
-      {/* Requerimientos del rodeo */}
+      {/* Animal a consultar */}
       <div className="kpi-card">
-        <h3>🐑 Requerimientos del rodeo</h3>
+        <h3>🐑 Animal a consultar</h3>
         <div className="grid2">
           <SelectField label="Categoría animal" value={catId} onChange={cambiarCategoria}
             options={categorias.map((c) => ({ value: c.id, label: c.nombre }))} />
-          <SelectField label="Estado fisiológico" value={estadoId} onChange={setEstadoId}
+          <SelectField label="Estado fisiológico" value={estadoId} onChange={cambiarEstado}
             options={cat.estados.map((e) => ({ value: e.id, label: e.nombre }))} />
-          <NumberField label="Peso vivo promedio" value={pesoVivo} onChange={setPesoVivo} suffix="kg" />
-          <NumberField label="Cantidad de animales" value={cantidad} onChange={setCantidad} suffix="#" />
+          {niveles.length > 0 && (
+            <SelectField label="Nivel productivo" value={nivelActivo ?? ''} onChange={setNivelId}
+              options={niveles.map((n) => ({ value: n.id, label: n.nombre }))} />
+          )}
+          <NumberField label="Peso vivo" value={pesoVivo} onChange={setPesoVivo} suffix="kg" />
         </div>
       </div>
 
-      {/* Análisis del forraje (consume el análisis químico; hoy solo EM entra al cálculo) */}
+      {/* Requerimiento (consulta a la tabla oficial) */}
       <div className="kpi-card">
-        <h3>🌿 Análisis del forraje</h3>
-        <div className="grid2">
-          <NumberField label="EM del forraje" value={forraje.emMcalKgMs} onChange={(v) => setF({ emMcalKgMs: v })} suffix="Mcal/kg MS" step={0.1} />
-          <NumberField label="PB" value={forraje.pbPorc ?? 0} onChange={(v) => setF({ pbPorc: v })} suffix="%" hint="informativo" />
-          <NumberField label="FDN" value={forraje.fdnPorc ?? 0} onChange={(v) => setF({ fdnPorc: v })} suffix="%" hint="informativo" />
-          <NumberField label="FDA" value={forraje.fdaPorc ?? 0} onChange={(v) => setF({ fdaPorc: v })} suffix="%" hint="informativo" />
-        </div>
-      </div>
-
-      {/* Resultado */}
-      <div className="kpi-card">
-        <h3>📋 Resultado</h3>
-        {res.disponible ? (
+        <h3>📋 Requerimiento nutricional ({requirementProvider.nombre})</h3>
+        {req ? (
           <>
-            <div className="kpi-mini-grid">
-              <div className="kpi-mini"><div className="v">{fmtNum(res.emPorAnimalDia, 2)}</div><div className="k">Mcal EM / animal / día</div></div>
-              <div className="kpi-mini"><div className="v">{fmtNum(res.emRodeoDia, 1)}</div><div className="k">Mcal EM del rodeo / día</div></div>
-              <div className="kpi-mini"><div className="v">{fmtNum(res.kgMsRequeridosDia, 1)}</div><div className="k">kg MS requeridos / día</div></div>
-            </div>
-            <p className="hint" style={{ marginTop: 8 }}>Fuente: {res.fuente}</p>
+            {req.valores.map((v) => {
+              const def = definicionNutriente(v.nutriente)
+              return (
+                <div className="kpi-line" key={v.nutriente}>
+                  <span className="lbl">{def ? def.nombre : v.nutriente}</span>
+                  <span className="val">{fmtNum(v.valor, 2)} {v.unidad}</span>
+                </div>
+              )
+            })}
+            <p className="hint" style={{ marginTop: 8 }}>Fuente: {req.fuente}</p>
           </>
         ) : (
           <div className="aviso info">
@@ -79,15 +84,16 @@ export default function Nutricion() {
         )}
       </div>
 
-      {/* Balance */}
-      {res.disponible && (
-        <div className="kpi-card">
-          <h3>⚖️ Balance</h3>
-          <div className="kpi-line"><span className="lbl">Necesidad energética</span><span className="val">{fmtNum(res.necesidadEnergetica, 1)} Mcal EM</span></div>
-          <div className="kpi-line"><span className="lbl">Oferta energética</span><span className="val">{fmtNum(res.ofertaEnergetica, 1)} Mcal EM</span></div>
-          <div className="kpi-line total"><span className="lbl">Balance</span><span className={'val ' + (res.balance >= 0 ? 'pos' : 'neg')}>{(res.balance >= 0 ? '+' : '') + fmtNum(res.balance, 1)} Mcal EM</span></div>
-        </div>
-      )}
+      {/* Etapas futuras (arquitectura ya preparada) */}
+      <div className="kpi-card">
+        <h3>🔜 Próximamente</h3>
+        <p className="hint">
+          <strong>Análisis químico del forraje</strong> (oferta nutricional) y <strong>balance</strong> oferta vs
+          requerimiento: energía, proteína y minerales, con deficiencias, excesos y nutrientes limitantes. La
+          arquitectura ya está preparada (ver <code>docs/nutricion/</code>); falta cargar las tablas oficiales y
+          desarrollar el análisis.
+        </p>
+      </div>
     </div>
   )
 }

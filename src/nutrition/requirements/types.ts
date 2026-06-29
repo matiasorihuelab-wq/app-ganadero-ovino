@@ -1,18 +1,31 @@
+import type { ValorNutriente } from '../nutrientes'
+
 // ============================================================================
-//  Módulo de Requerimientos Nutricionales — tipos de dominio.
+//  Requerimientos Nutricionales — tipos de dominio.
 //
-//  Este módulo NO modela ni estima: CONSULTA requerimientos provenientes de tablas
-//  oficiales (NRC y, en el futuro, INRA / AFRC / CSIRO). La UI nunca conoce la
-//  fuente de los datos: habla con un NutrientRequirementProvider.
+//  La aplicación NO calcula requerimientos: los CONSULTA desde tablas oficiales
+//  (NRC y, en el futuro, INRA / AFRC / CSIRO). Sin modelo propio, sin coeficientes,
+//  sin simulación. La UI nunca conoce la fuente: habla con un Provider.
 // ============================================================================
 
 /** Categorías animales soportadas (estructura ampliable). */
 export type IdCategoria = 'ovejas' | 'borregas' | 'carneros'
 
-/** Estado fisiológico (cada categoría define los suyos). */
+/** Nivel productivo aplicable a un estado (p. ej. nivel de producción de leche en
+ *  lactancia, o tasa de ganancia en crecimiento). El requerimiento puede depender de
+ *  él "cuando corresponda". */
+export interface NivelProductivo {
+  id: string
+  nombre: string
+}
+
+/** Estado fisiológico de una categoría. */
 export interface EstadoFisiologico {
   id: string
   nombre: string
+  /** Niveles productivos aplicables. Si está vacío/undefined, el requerimiento de este
+   *  estado NO depende del nivel productivo (y la UI no pide ese dato). */
+  nivelesProductivos?: NivelProductivo[]
 }
 
 /** Una categoría con sus estados fisiológicos. */
@@ -22,30 +35,31 @@ export interface Categoria {
   estados: EstadoFisiologico[]
 }
 
-/** Clave de consulta a la tabla oficial. */
+/**
+ * Clave de consulta a la tabla oficial. El requerimiento depende de la categoría, el
+ * estado fisiológico, el peso vivo y —cuando corresponda— el nivel productivo.
+ */
 export interface ConsultaRequerimiento {
   categoria: IdCategoria
   estado: string
   pesoVivoKg: number
+  nivelProductivo?: string
 }
 
 /**
- * Requerimiento nutricional oficial para una combinación categoría + estado +
- * peso vivo. Inicialmente la UI usa solo `emMcalDia` y `consumoMsKgDia`; el resto
- * queda como estructura para ampliar (proteína, fibras, minerales) sin romper nada.
+ * Requerimiento nutricional oficial para una consulta: un conjunto de nutrientes
+ * (energía, proteína, consumo, minerales, vitaminas…) tal como los publica la tabla.
+ * Se modela como lista de `ValorNutriente` para que agregar nutrientes no cambie el
+ * tipo. Cada requerimiento cita su `fuente` (referencia bibliográfica, obligatoria).
  */
 export interface RequerimientoNutricional {
-  emMcalDia: number          // Mcal EM / animal / día (requerimiento energético)
-  consumoMsKgDia: number     // kg MS / animal / día (consumo esperado / capacidad de ingesta)
-  proteinaGDia?: number      // g de proteína / día (ampliación futura)
-  /** Referencia bibliográfica del dato (p. ej. "NRC 2007, Tabla 11-1"). Obligatoria:
-   *  ningún requerimiento se usa sin fuente. */
+  valores: ValorNutriente[]
   fuente: string
 }
 
 /**
  * Puerto: la app consulta requerimientos sin saber de qué sistema provienen.
- * Implementaciones futuras: NRCProvider, INRAProvider, AFRCProvider, CSIROProvider.
+ * Implementaciones futuras: NRCProvider (hoy), INRAProvider, AFRCProvider, CSIROProvider.
  */
 export interface NutrientRequirementProvider {
   /** Nombre del sistema de referencia (p. ej. 'NRC'). */
