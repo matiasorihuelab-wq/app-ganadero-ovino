@@ -11,6 +11,7 @@ import ResultadosPanel from './components/Resultados'
 import Timeline from './components/Timeline'
 import Neb from './components/Neb'
 import { ModalGuardar, ModalCargar, ModalComparar } from './components/Modales'
+import BotonesBeta from './components/BotonesBeta'
 
 type ModalActivo = null | 'guardar' | 'cargar' | 'comparar'
 type Vista = 'dashboard' | 'timeline' | 'neb'
@@ -74,6 +75,7 @@ export default function App() {
           <button className="btn-sec" onClick={() => setModal('comparar')}>🔄 Comparar</button>
           <button className="btn-sec" onClick={() => exportarCSV(inp, r)}>📊 CSV</button>
           <button className="btn-sec" onClick={exportarPDF}>📥 PDF</button>
+          <BotonesBeta />
         </div>
       </header>
 
