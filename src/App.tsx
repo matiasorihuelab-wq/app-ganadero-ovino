@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { Inputs } from './engine/types'
 import { calcular } from './engine/calc'
-import { INPUTS_VACIO, INPUTS_EJEMPLO } from './engine/presets'
+import { INPUTS_VACIO, INPUTS_EJEMPLO, sanitizeInputs } from './engine/presets'
 import { validar } from './utils/validaciones'
 import { exportarCSV, exportarPDF } from './utils/exportar'
 import { borradorRepository } from './persistence'
@@ -14,11 +14,11 @@ import { ModalGuardar, ModalCargar, ModalComparar } from './components/Modales'
 type ModalActivo = null | 'guardar' | 'cargar' | 'comparar'
 type Vista = 'dashboard' | 'timeline' | 'neb'
 
-// Borrador inicial: lo guardado (mergeado sobre el vacío para tolerar campos que
-// falten en versiones viejas) o el preset vacío. (M3)
+// Borrador inicial: lo guardado (saneado sobre el vacío para tolerar campos que
+// falten o esquemas viejos/corruptos) o el preset vacío. (M3)
 function inicial(): Inputs {
   const guardado = borradorRepository.cargar()
-  return guardado ? { ...INPUTS_VACIO, ...guardado } : INPUTS_VACIO
+  return guardado ? sanitizeInputs(guardado) : INPUTS_VACIO
 }
 
 export default function App() {
@@ -26,8 +26,21 @@ export default function App() {
   const [modal, setModal] = useState<ModalActivo>(null)
   const [vista, setVista] = useState<Vista>('dashboard')
 
-  // Autoguardado del borrador en curso: no se pierde al recargar o cerrar. (M3)
-  useEffect(() => { borradorRepository.guardar(inp) }, [inp])
+  // Autoguardado del borrador con debounce (no escribe en cada tecla). (M3, H-14)
+  useEffect(() => {
+    const id = setTimeout(() => borradorRepository.guardar(inp), 400)
+    return () => clearTimeout(id)
+  }, [inp])
+
+  // Flush del último cambio al ocultar/cerrar la pestaña (no perder lo tipeado
+  // dentro de la ventana de debounce).
+  const inpRef = useRef(inp)
+  inpRef.current = inp
+  useEffect(() => {
+    const flush = () => { if (document.visibilityState === 'hidden') borradorRepository.guardar(inpRef.current) }
+    document.addEventListener('visibilitychange', flush)
+    return () => document.removeEventListener('visibilitychange', flush)
+  }, [])
 
   const set = (patch: Partial<Inputs>) => setInp((prev) => ({ ...prev, ...patch }))
   const r = useMemo(() => calcular(inp), [inp])

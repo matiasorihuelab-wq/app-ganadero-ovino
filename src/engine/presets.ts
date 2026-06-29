@@ -84,6 +84,21 @@ export const INPUTS_VACIO: Inputs = {
   contribucionHa: 8,
 }
 
+/**
+ * Normaliza datos de entrada provenientes de almacenamiento (borrador, escenarios
+ * guardados) hacia un `Inputs` válido y completo: mergea sobre el preset vacío para
+ * rellenar campos faltantes de versiones viejas y garantiza que `medicamentos` sea
+ * un array. Evita TypeErrors al cargar esquemas viejos o corruptos.
+ */
+export function sanitizeInputs(raw: unknown): Inputs {
+  const parcial = raw && typeof raw === 'object' ? (raw as Partial<Inputs>) : {}
+  const merged: Inputs = { ...INPUTS_VACIO, ...parcial }
+  if (!Array.isArray(merged.medicamentos)) {
+    merged.medicamentos = INPUTS_VACIO.medicamentos.map((m) => ({ ...m }))
+  }
+  return merged
+}
+
 // ============================================================================
 //  PRESET EJEMPLO — Merino Australiano (valores exactos del Excel de referencia)
 //  Sólo para QA / demostración. Reproduce los números del Excel.

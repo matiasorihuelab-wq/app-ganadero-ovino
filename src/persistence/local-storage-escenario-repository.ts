@@ -26,7 +26,12 @@ export function createLocalStorageEscenarioRepository(
   }
 
   function escribir(lista: Escenario[]): void {
-    storage.setItem(KEY, JSON.stringify(lista))
+    // No-op ante cuota llena / storage bloqueado: no debe tumbar la UI.
+    try {
+      storage.setItem(KEY, JSON.stringify(lista))
+    } catch {
+      /* persistencia best-effort */
+    }
   }
 
   return {

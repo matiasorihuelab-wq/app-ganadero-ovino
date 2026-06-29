@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Inputs } from '../engine/types'
 import { calcular } from '../engine/calc'
+import { sanitizeInputs } from '../engine/presets'
 import { escenarioRepository, type Escenario } from '../persistence'
 import { fmtUSD, fmtNum } from '../utils/format'
 
@@ -28,11 +29,11 @@ export function ModalCargar({ onClose, onLoad }: { onClose: () => void; onLoad: 
       <h2>📂 Cargar escenario</h2>
       {lista.length === 0 && <p className="hint">No hay escenarios guardados todavía.</p>}
       {lista.map((e) => {
-        const r = calcular(e.inputs)
+        const r = calcular(sanitizeInputs(e.inputs))
         return (
           <div className="scn-row" key={e.id}>
             <div className="nm">{e.nombre}<div className="mt">{e.fecha} · MN {fmtUSD(r.margenNeto, 0)}</div></div>
-            <button className="btn-pri" onClick={() => { onLoad(e.inputs); onClose() }}>Cargar</button>
+            <button className="btn-pri" onClick={() => { onLoad(sanitizeInputs(e.inputs)); onClose() }}>Cargar</button>
             <button className="btn-danger" onClick={() => { escenarioRepository.eliminar(e.id); setLista(escenarioRepository.listar()) }}>Eliminar</button>
           </div>
         )
@@ -49,7 +50,7 @@ export function ModalComparar({ actual, onClose }: { actual: Inputs; onClose: ()
   const [bId, setBId] = useState(lista[0]?.id || '')
   const b = lista.find((e) => e.id === bId)
   const rA = calcular(actual)
-  const rB = b ? calcular(b.inputs) : null
+  const rB = b ? calcular(sanitizeInputs(b.inputs)) : null
 
   // [etiqueta, A, B, decimales, esMoneda]
   const filas: [string, number, number, number, boolean][] = rB

@@ -31,7 +31,13 @@ export function createLocalStorageBorradorRepository(
       }
     },
     guardar(inputs: Inputs) {
-      storage.setItem(KEY, JSON.stringify(inputs))
+      // No-op ante cuota llena / storage bloqueado (modo privado): no debe tumbar
+      // la UI, sobre todo corriendo en cada cambio del borrador.
+      try {
+        storage.setItem(KEY, JSON.stringify(inputs))
+      } catch {
+        /* persistencia best-effort */
+      }
     },
     limpiar() {
       storage.removeItem(KEY)
