@@ -67,8 +67,9 @@ UI (React)  ──►  motor económico (engine)        ──►  Resultados (d
 
 ## 5. Funcionalidades congeladas
 
-- **Motor económico (RC2/RC1 baseline):** congelado. No tocar fórmulas/cálculos/resultados
-  sin leer `BASELINE_RC1.md` + `CHANGE_POLICY.md`.
+- **Motor económico (baseline congelada desde RC1):** no tocar fórmulas/cálculos/resultados
+  sin leer `BASELINE_RC1.md` + `CHANGE_POLICY.md`. El código del motor no cambió desde el
+  tag `v1.0.0-rc.1`; la app avanzó a RC3 por trabajo fuera del motor.
 - **Módulo de Requerimientos Nutricionales:** congelado y marcado **🚧 En construcción**.
   Existe la arquitectura (catálogo de nutrientes, tipos, interfaces, provider NRC con tabla
   **vacía**, contratos futuros de forraje y balance), pero **no se debe seguir
