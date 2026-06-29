@@ -34,8 +34,8 @@ institución como el **Secretariado Uruguayo de la Lana (SUL)**. Esa adopción s
 - Cálculo de rentabilidad ovina (ingresos por lana y carne, costos directos y fijos,
   márgenes) replicando fielmente un modelo de referencia validado contra Excel (18/18).
 - Carga de datos por formulario, con resultados **en tiempo real**.
-- Análisis complementarios: evolución temporal / flujo de caja y necesidades
-  energéticas (NEB).
+- Análisis complementarios: evolución temporal / flujo de caja y **requerimientos
+  nutricionales** (consulta de tablas oficiales, no un modelo propio).
 - Guardado, comparación y exportación (CSV/PDF) de **escenarios** locales.
 - Funciona como SPA, PWA instalable y archivo único offline.
 

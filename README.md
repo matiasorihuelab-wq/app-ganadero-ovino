@@ -101,7 +101,7 @@ docs/                # vision, architecture, distribucion, v1-backlog, productio
 ## Funcionalidades
 
 - Cálculo en **tiempo real** al editar cualquier input.
-- Tres vistas en el panel de resultados (pestañas): **Dashboard**, **Evolución** y **Energético**.
+- Tres vistas en el panel de resultados (pestañas): **Dashboard**, **Evolución** y **Requerimientos** (nutricionales).
 - Botón **"Cargar ejemplo"** (Merino Australiano) para QA / demostración.
 - **Guardar / cargar / comparar** escenarios (localStorage).
 - **Exportar** a CSV y a PDF (vía impresión del navegador).
@@ -116,11 +116,11 @@ docs/                # vision, architecture, distribucion, v1-backlog, productio
   costos fijos / mano de obra se prorratean. La **suma anual reconcilia exactamente** con
   el margen neto del dashboard. Incluye gráfico de barras + línea de cash flow acumulado.
   Motor: `src/engine/timeline.ts`.
-- **🔥 Análisis energético (NEB):** calculadora de necesidades energéticas por categoría
-  (Mcal EM/día), con ajustes dinámicos por temperatura (estrés por frío), condición
-  corporal objetivo y ganancia diaria esperada. Calcula mantenimiento (coef × PV^0,75),
-  ración recomendada (kg MS/día según densidad del forraje) y costo equivalente. Todos los
-  coeficientes son editables. Motor: `src/engine/neb.ts`.
+- **🥗 Requerimientos nutricionales:** consulta los requerimientos **oficiales** (NRC y,
+  a futuro, INRA/AFRC/CSIRO) de una categoría/estado/peso y calcula los kg de materia
+  seca que necesita el rodeo, balanceando contra la EM del forraje. **No usa un modelo
+  propio**: consulta tablas auditables vía un *Requirement Provider*. Ver
+  [docs/nutricion/](docs/nutricion/). Módulo: `src/nutrition/`, UI `src/components/Nutricion.tsx`.
 
 ## Notas sobre el modelo
 

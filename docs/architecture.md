@@ -38,7 +38,10 @@ React ni del navegador. Convierte un objeto de entrada (`Inputs`) en resultados
 - `calc.ts` — motor principal; réplica fiel del modelo Excel (cada bloque cita su celda).
 - `presets.ts` — preset vacío (genérico) y preset de ejemplo (Merino, usado por QA).
 - `timeline.ts` — evolución temporal / flujo de caja mensual.
-- `neb.ts` — necesidades energéticas por categoría.
+
+> El módulo de **Requerimientos Nutricionales** vive aparte, en `src/nutrition/` (no es
+> parte del motor económico): consulta tablas oficiales (NRC…) vía un
+> `NutrientRequirementProvider`. Ver `docs/nutricion/`.
 
 **Regla dura:** el motor no conoce a la UI ni a la persistencia. Cualquier cambio que
 mueva un número validado contra el Excel se verifica con `npm run validate` (18/18).
@@ -53,7 +56,8 @@ Capa de presentación en React. **Depende** del motor (le pasa `Inputs`, muestra
 `Resultados`), pero el motor **no depende** de ella.
 
 - `Formulario` + `Campos` — entrada de datos.
-- `Resultados` (dashboard), `Timeline` (evolución), `Neb` (energético) — visualización.
+- `Resultados` (dashboard), `Timeline` (evolución), `Nutricion` (requerimientos
+  nutricionales, módulo `src/nutrition/`) — visualización.
 - `Modales` — guardar / cargar / comparar escenarios (consume la persistencia).
 - `App.tsx` — composición y estado de UI; recalcula vía `useMemo(calcular, [inputs])`.
 
@@ -147,14 +151,15 @@ El cálculo es **síncrono y en tiempo real**: cada cambio en `Inputs` recalcula
 
 ```
 src/
-  engine/        # núcleo de cálculo (TS puro, sin UI) + tests *.test.ts
-  components/    # UI React (incluye ErrorBoundary)
+  engine/        # núcleo de cálculo económico (TS puro, sin UI) + tests *.test.ts
+  nutrition/     # requerimientos nutricionales (provider de tablas oficiales) + tests
+  components/    # UI React (incluye ErrorBoundary, Nutricion)
   persistence/   # puertos EscenarioRepository + BorradorRepository + adapters
   utils/         # presentación: format, validaciones, exportar
-  App.tsx, main.tsx, styles.css, version.ts
+  App.tsx, main.tsx, styles.css, version.ts, bug-report.ts
 scripts/         # validate.ts (motor vs Excel), package-release.mjs, gen-icons.mjs
 docs/            # vision, architecture, distribucion, v1-backlog, production-review,
-                 # BASELINE_RC1, CHANGE_POLICY, adr/, usuario/, excel-audit/
+                 # BASELINE_RC1, CHANGE_POLICY, nutricion/, adr/, usuario/, excel-audit/
 release/         # (generado por npm run package) paquete de distribución, gitignored
 .github/workflows/ci.yml
 ```

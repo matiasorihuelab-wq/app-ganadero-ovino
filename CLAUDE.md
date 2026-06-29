@@ -36,10 +36,12 @@ node scripts/gen-icons.mjs                             # regenera los íconos PN
   - `calc.ts` — **motor principal**, réplica fiel del Excel (cada bloque cita su celda).
   - `presets.ts` — preset vacío (genérico) y preset ejemplo (Merino Australiano para QA).
   - `timeline.ts` — evolución temporal / cash flow mensual (reconcilia con el margen neto).
-  - `neb.ts` — necesidades energéticas (NEB) por categoría.
-- `src/components/` — UI: `Formulario`, `Resultados` (dashboard), `Timeline`, `Neb`,
-  `Modales` (guardar/cargar/comparar escenarios), `Campos` (inputs reutilizables),
-  `ErrorBoundary`.
+- `src/nutrition/` — **Requerimientos Nutricionales** (módulo separado del motor
+  económico): consulta tablas oficiales (NRC…) vía un `NutrientRequirementProvider`. No
+  modela: consulta. Ver `docs/nutricion/`.
+- `src/components/` — UI: `Formulario`, `Resultados` (dashboard), `Timeline`,
+  `Nutricion` (requerimientos), `Modales` (guardar/cargar/comparar escenarios), `Campos`
+  (inputs reutilizables), `ErrorBoundary`.
 - `src/persistence/` — persistencia detrás de puertos: `EscenarioRepository`
   (escenarios con nombre) y `BorradorRepository` (autoguardado), con adapters de
   `localStorage` inyectables. Ver ADR-0002.
