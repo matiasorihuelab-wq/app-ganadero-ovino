@@ -33,10 +33,14 @@ dejarla lista. Esta guía te dice **qué probar** y **cómo avisarnos** si algo 
 - Un **resultado que te parece incorrecto** (avisá aunque no estés seguro).
 - Una **idea de mejora** de la experiencia (no de nuevas funciones, sino de claridad/uso).
 
-## Qué información enviarnos
+## Cómo enviarnos un problema
 
-Seguí la plantilla de **[Cómo reportar errores](docs/usuario/reportar-errores.md)**.
-En resumen:
+Usá el botón **🐞 Reportar un problema** (en la barra de la aplicación): abre el
+formulario de reporte en una pestaña nueva. Antes de enviarlo, tocá **📋 Diagnóstico**
+para copiar tu versión/navegador/sistema y pegalo en el formulario.
+
+Detalle en **[Cómo reportar errores](docs/usuario/reportar-errores.md)**. En el formulario
+te vamos a pedir, en resumen:
 
 ```
 Versión: RC1   (aparece arriba a la derecha, junto al título)
@@ -48,7 +52,7 @@ Captura adjunta: sí / no
 CSV adjunto (si es un tema de número): sí / no
 ```
 
-Enviá todo a la persona que te compartió la app.
+Todo se envía mediante el botón **🐞 Reportar un problema** dentro de la app.
 
 ## Lo que NO hace falta que hagas
 

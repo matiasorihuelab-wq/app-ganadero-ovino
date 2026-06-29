@@ -42,6 +42,25 @@ npm run validate    # motor vs Excel (18/18)
 
 La CI (GitHub Actions) corre todo esto en cada push y Pull Request.
 
+## Publicar una nueva RC
+
+La app se publica como enlace público vía **GitHub Pages**, de forma **automática**.
+Guía completa y configuración inicial: [docs/DEPLOY_GITHUB_PAGES.md](docs/DEPLOY_GITHUB_PAGES.md).
+
+1. **Generar el paquete** (local, opcional para revisar): `npm run package` → `release/`.
+2. **Actualizar versión** (`package.json`, `src/version.ts`) y `CHANGELOG.md`.
+3. **Subir los cambios a la rama de distribución** (`main`):
+   ```bash
+   git checkout main && git merge <rama-de-trabajo> && git push origin main
+   ```
+4. **La publicación se dispara sola**: el workflow `deploy-pages.yml` corre
+   lint → typecheck → test → validate → build → package y publica `release/web`.
+   (También se puede lanzar a mano desde **Actions → Deploy a GitHub Pages → Run workflow**.)
+5. **Verificar que terminó**: en la pestaña **Actions** el workflow queda en verde; el
+   job *deploy* muestra la URL publicada (campo *page_url*).
+6. **Enlace público** (el que usan los técnicos del SUL):
+   `https://matiasorihuelab-wq.github.io/app-ganadero-ovino/`
+
 ## Verificación de fórmulas (QA)
 
 `npm run validate` (o `npm test`) carga el preset de ejemplo y compara 18 resultados

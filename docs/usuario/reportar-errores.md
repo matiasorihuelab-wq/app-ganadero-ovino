@@ -3,10 +3,14 @@
 Tu reporte es muy valioso para mejorar la aplicación. No hace falta que sepas de
 computación: con que cuentes **qué hiciste y qué pasó**, alcanza.
 
-## A dónde enviarlo
+## Cómo reportar
 
-Enviá el reporte a la persona que te compartió la aplicación
-(**contacto del proyecto: _________________** ← completar con mail / WhatsApp / etc.).
+Usá el botón **🐞 Reportar un problema** (arriba en la barra de la aplicación): abre el
+**formulario de reporte** en una pestaña nueva. Completá los campos y enviá.
+
+Para que el reporte sea más útil, antes de enviarlo tocá **📋 Diagnóstico** (al lado del
+botón anterior): copia automáticamente tu versión, navegador y sistema. **Pegá** eso en
+el formulario (o mandalo por WhatsApp). No incluye ningún dato personal.
 
 ## Qué incluir (cuanto más, mejor)
 
