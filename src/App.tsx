@@ -9,13 +9,14 @@ import { APP_VERSION, APP_VERSION_LABEL, APP_ESTADO } from './version'
 import Formulario from './components/Formulario'
 import ResultadosPanel from './components/Resultados'
 import Timeline from './components/Timeline'
+import Informe from './components/Informe'
 import Nutricion from './components/Nutricion'
 import { ModalGuardar, ModalCargar, ModalComparar } from './components/Modales'
 import BotonesBeta from './components/BotonesBeta'
 import Documentacion from './components/Documentacion'
 
 type ModalActivo = null | 'guardar' | 'cargar' | 'comparar'
-type Vista = 'dashboard' | 'timeline' | 'nutricion'
+type Vista = 'dashboard' | 'timeline' | 'informe' | 'nutricion'
 
 // Borrador inicial: lo guardado (saneado sobre el vacío para tolerar campos que
 // falten o esquemas viejos/corruptos) o el preset vacío. (M3)
@@ -89,6 +90,7 @@ export default function App() {
           <div className="tabs">
             <button className={vista === 'dashboard' ? 'tab on' : 'tab'} onClick={() => setVista('dashboard')}>📊 Dashboard</button>
             <button className={vista === 'timeline' ? 'tab on' : 'tab'} onClick={() => setVista('timeline')}>📅 Evolución</button>
+            <button className={vista === 'informe' ? 'tab on' : 'tab'} onClick={() => setVista('informe')}>📋 Informe</button>
             <button className={vista === 'nutricion' ? 'tab on' : 'tab'} onClick={() => setVista('nutricion')} title="Módulo en construcción">🚧 Requerimientos</button>
           </div>
           {avisos.length > 0 && (
@@ -103,6 +105,7 @@ export default function App() {
           )}
           {vista === 'dashboard' && <ResultadosPanel r={r} />}
           {vista === 'timeline' && <Timeline inp={inp} r={r} />}
+          {vista === 'informe' && <Informe inp={inp} r={r} />}
           {vista === 'nutricion' && <Nutricion />}
         </div>
       </div>

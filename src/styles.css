@@ -167,7 +167,7 @@ table.tbl td.num { font-family: 'Consolas', monospace; }
   @page { margin: 14mm; }
   body { background: #fff; font-size: 12px; }
   /* Ocultar lo que es de edición/navegación: solo se imprime el reporte. */
-  .toolbar, .tabs, .col-form, .modal-bg, .btn-add,
+  .toolbar, .tabs, .col-form, .modal-bg, .btn-add, .no-print,
   .med-table button, .scn-row button { display: none !important; }
   /* Header sobrio (predio + raza) en vez del banner con gradiente sticky. */
   .header { position: static; background: #fff; color: var(--texto); box-shadow: none;
@@ -183,4 +183,20 @@ table.tbl td.num { font-family: 'Consolas', monospace; }
   /* Mostrar el contenido de las secciones aunque estén colapsadas. */
   .section > .body { display: block !important; }
   .section > summary::before { display: none; }
+  .informe .kpi-card { break-inside: avoid; }
 }
+
+/* ---------- Informe de análisis crítico ---------- */
+.informe-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.informe .kpi-card p { margin: 6px 0; line-height: 1.5; }
+.informe .sev, .informe .prio { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+.sev-critico { background: #fbe0dd; color: #b5261a; }
+.sev-alto { background: #fdeede; color: #a5620a; }
+.sev-medio { background: #fdf6dd; color: #8a6d10; }
+.sev-ok { background: #e3f3e2; color: #1f6b2a; }
+.prio-alta { background: #fbe0dd; color: #b5261a; }
+.prio-media { background: #fdf6dd; color: #8a6d10; }
+.prio-baja { background: #eef1ee; color: #555; }
+.informe .tbl td { text-align: left; vertical-align: top; }
+.informe .tbl td.num { text-align: right; }
+.informe .tbl .mt { font-size: 11px; color: var(--texto-suave); font-weight: 400; }
