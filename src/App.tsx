@@ -12,6 +12,7 @@ import Timeline from './components/Timeline'
 import Nutricion from './components/Nutricion'
 import { ModalGuardar, ModalCargar, ModalComparar } from './components/Modales'
 import BotonesBeta from './components/BotonesBeta'
+import Documentacion from './components/Documentacion'
 
 type ModalActivo = null | 'guardar' | 'cargar' | 'comparar'
 type Vista = 'dashboard' | 'timeline' | 'nutricion'
@@ -75,6 +76,7 @@ export default function App() {
           <button className="btn-sec" onClick={() => setModal('comparar')}>🔄 Comparar</button>
           <button className="btn-sec" onClick={() => exportarCSV(inp, r)}>📊 CSV</button>
           <button className="btn-sec" onClick={exportarPDF}>📥 PDF</button>
+          <Documentacion />
           <BotonesBeta />
         </div>
       </header>
