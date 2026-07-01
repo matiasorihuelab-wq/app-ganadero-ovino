@@ -172,3 +172,47 @@ export const INPUTS_EJEMPLO: Inputs = {
   rentaHa: 60,
   contribucionHa: 8,
 }
+
+// ============================================================================
+//  PRESET DEMO — "CICOMA-SUL": establecimiento de ejemplo de ALTO DESEMPEÑO
+//  (resultado económico POSITIVO). Es el caso que carga el usuario con el botón
+//  "Cargar ejemplo" (seed por defecto sugerido).
+//
+//  Es INDEPENDIENTE del fixture de QA (INPUTS_EJEMPLO), que reproduce los valores
+//  exactos del Excel de referencia y valida 18/18. No tocar INPUTS_EJEMPLO: cambiarlo
+//  rompería la validación del motor.
+// ============================================================================
+export const INPUTS_DEMO: Inputs = {
+  ...INPUTS_EJEMPLO,
+  nombrePredio: 'CICOMA-SUL',
+  raza: 'Merino Dohne',
+  // Escala eficiente: majada grande con dotación de personal ajustada.
+  ovejasEncarneradas: 1200,
+  pesoAdulto: 45,
+  supPropiedad: 1000,
+  supArrendada: 0,
+  cantTrabajadores: 2,
+  dotacionSegura: 0.9,
+  porcReposicion: 0.2,
+  // Alta eficiencia reproductiva y baja mortandad.
+  senaladaBase: 1.05,
+  categoriaVenta: 'Cord Dest',
+  mortOvejas: 0.03,
+  mortCordSenDest: 0.05,
+  mortCordDestEsq: 0.03,
+  mortCordDestVenta: 0.03,
+  mortSolteros: 0.03,
+  // Lana fina certificada (mayor precio) y buen precio de carne.
+  micronaje: 18.5,
+  porcPesoLanaSucia: 0.1,
+  certificacion: true,
+  precioCarneBase: 4.8,
+  rendimientoCanal: 0.5,
+  precioDolar: 41,
+  // Manejo/costos coherentes con un sistema pastoril bien llevado.
+  duracionCN: 60,
+  salarioMensualUYU: 40000,
+  ovejasPorCarnero: 40,
+  vidaCarneroAnios: 4,
+  relacionCarnerosStock: 0.03,
+}

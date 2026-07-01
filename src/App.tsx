@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { Inputs } from './engine/types'
 import { calcular } from './engine/calc'
-import { INPUTS_VACIO, INPUTS_EJEMPLO, sanitizeInputs } from './engine/presets'
+import { INPUTS_VACIO, INPUTS_DEMO, sanitizeInputs } from './engine/presets'
 import { validar } from './utils/validaciones'
 import { exportarCSV, exportarPDF } from './utils/exportar'
 import { borradorRepository } from './persistence'
@@ -53,7 +53,7 @@ export default function App() {
   // ¿Hay datos cargados? (para confirmar antes de pisarlos). El borrador se
   // autoguarda, así que reemplazar sin avisar perdería el trabajo en curso.
   const tieneDatos = () => JSON.stringify(inp) !== JSON.stringify(INPUTS_VACIO)
-  const cargarEjemplo = () => { if (!tieneDatos() || confirm('¿Cargar el ejemplo y reemplazar los datos actuales?')) setInp(INPUTS_EJEMPLO) }
+  const cargarEjemplo = () => { if (!tieneDatos() || confirm('¿Cargar el ejemplo y reemplazar los datos actuales?')) setInp(INPUTS_DEMO) }
   const limpiar = () => { if (confirm('¿Vaciar todos los campos?')) setInp(INPUTS_VACIO) }
   const cargarEscenario = (inputs: Inputs) => { if (!tieneDatos() || confirm('¿Cargar este escenario y reemplazar los datos actuales?')) setInp(inputs) }
 
