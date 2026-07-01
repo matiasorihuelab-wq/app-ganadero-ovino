@@ -7,7 +7,7 @@ import { APP_VERSION, APP_VERSION_LABEL } from './version'
 // ============================================================================
 
 /** URL del formulario de reporte de problemas. REEMPLAZAR por la real. */
-export const BUG_REPORT_URL = 'https://forms.gle/REEMPLAZAR-CON-LA-URL-DEL-FORMULARIO'
+export const BUG_REPORT_URL = 'https://forms.gle/SNB65tBVXHMuUUGk7'
 
 /** Abre el formulario de reporte en una pestaña nueva. */
 export function abrirReporte(): void {
