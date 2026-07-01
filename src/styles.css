@@ -90,6 +90,7 @@ button:active { transform: translateY(1px); }
 .btn-danger { background: var(--error); color: #fff; }
 button:hover { filter: brightness(1.06); }
 .btn-add { background: #eef3e9; color: var(--secundario); border: 1px dashed var(--secundario-l); font-size: 12px; padding: 6px 10px; }
+.btn-sec:disabled { opacity: .6; cursor: default; filter: none; }
 
 /* ---------- KPIs ---------- */
 .kpi-card { background: var(--panel); border-radius: 10px; box-shadow: var(--sombra); border: 1px solid var(--borde); padding: 16px; margin-bottom: 14px; }

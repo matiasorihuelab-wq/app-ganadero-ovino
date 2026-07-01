@@ -54,6 +54,8 @@ export default function App() {
   // autoguarda, así que reemplazar sin avisar perdería el trabajo en curso.
   const tieneDatos = () => JSON.stringify(inp) !== JSON.stringify(INPUTS_VACIO)
   const cargarEjemplo = () => { if (!tieneDatos() || confirm('¿Cargar el ejemplo y reemplazar los datos actuales?')) setInp(INPUTS_DEMO) }
+  // ¿el formulario actual es exactamente el ejemplo CICOMA-SUL? (para cambiar la sugerencia).
+  const ejemploCargado = JSON.stringify(inp) === JSON.stringify(INPUTS_DEMO)
   const limpiar = () => { if (confirm('¿Vaciar todos los campos?')) setInp(INPUTS_VACIO) }
   const cargarEscenario = (inputs: Inputs) => { if (!tieneDatos() || confirm('¿Cargar este escenario y reemplazar los datos actuales?')) setInp(inputs) }
 
@@ -70,7 +72,7 @@ export default function App() {
         </div>
         <div className="spacer" />
         <div className="toolbar">
-          <button className="btn-sec" onClick={cargarEjemplo}>Cargar ejemplo</button>
+          <button className="btn-sec" onClick={cargarEjemplo} disabled={ejemploCargado} title="Carga el establecimiento de ejemplo CICOMA-SUL (reemplaza los datos actuales)">{ejemploCargado ? '✓ Ejemplo cargado' : 'Cargar ejemplo: CICOMA-SUL'}</button>
           <button className="btn-sec" onClick={limpiar}>Limpiar</button>
           <button className="btn-sec" onClick={() => setModal('guardar')}>💾 Guardar</button>
           <button className="btn-sec" onClick={() => setModal('cargar')}>📂 Cargar</button>
