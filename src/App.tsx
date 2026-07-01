@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { Inputs } from './engine/types'
 import { calcular } from './engine/calc'
-import { INPUTS_VACIO, INPUTS_DEMO, sanitizeInputs } from './engine/presets'
+import { INPUTS_VACIO, DEMO_STATE, sanitizeInputs } from './engine/presets'
 import { validar } from './utils/validaciones'
 import { exportarCSV, exportarPDF } from './utils/exportar'
 import { borradorRepository } from './persistence'
@@ -14,9 +14,14 @@ import Nutricion from './components/Nutricion'
 import { ModalGuardar, ModalCargar, ModalComparar } from './components/Modales'
 import BotonesBeta from './components/BotonesBeta'
 import Documentacion from './components/Documentacion'
+import { logEvent, exponerEnConsola } from './observabilidad'
 
 type ModalActivo = null | 'guardar' | 'cargar' | 'comparar'
 type Vista = 'dashboard' | 'timeline' | 'informe' | 'nutricion'
+
+// Registro de apertura una sola vez por carga de página (resiste el doble-invoke de
+// StrictMode en dev; se reinicia al recargar). Observabilidad, no afecta la lógica.
+let aperturaRegistrada = false
 
 // Borrador inicial: lo guardado (saneado sobre el vacío para tolerar campos que
 // falten o esquemas viejos/corruptos) o el preset vacío. (M3)
@@ -50,14 +55,50 @@ export default function App() {
   const r = useMemo(() => calcular(inp), [inp])
   const avisos = useMemo(() => validar(inp, r), [inp, r])
 
+  // ---- Observabilidad ligera (local, sin backend) ----
+  const rRef = useRef(r)
+  rRef.current = r
+  // Referencia del último inp registrado: sólo se loguea ante un cambio real de estado
+  // (un edit produce un objeto nuevo). Evita logs espurios en mount y en StrictMode.
+  const ultimoInpLogueado = useRef(inp)
+  const cargaProgramatica = useRef(false) // ejemplo/limpiar/escenario no son "ediciones"
+
+  useEffect(() => {
+    if (!aperturaRegistrada) {
+      aperturaRegistrada = true
+      logEvent('app_abierta', { version: APP_VERSION })
+    }
+    exponerEnConsola()
+  }, [])
+
+  // "cambios en inputs del predio" + "ejecución de cálculo" (con debounce, sin datos sensibles)
+  useEffect(() => {
+    if (inp === ultimoInpLogueado.current) return // sin cambio real de estado
+    ultimoInpLogueado.current = inp
+    if (cargaProgramatica.current) { cargaProgramatica.current = false; return }
+    const id = setTimeout(() => {
+      logEvent('inputs_editados')
+      logEvent('calculo_ejecutado', { rentable: (rRef.current?.margenNeto ?? 0) >= 0 })
+    }, 1200)
+    return () => clearTimeout(id)
+  }, [inp])
+
+  // "uso del módulo de sensibilidad" (vive en la pestaña Informe). Solo cuando el
+  // informe tiene contenido (con datos): el estado vacío no computa sensibilidad.
+  useEffect(() => {
+    const rr = rRef.current
+    const informeConDatos = !!rr && !(rr.ingresoBruto === 0 && rr.costosFijosTotal === 0)
+    if (vista === 'informe' && informeConDatos) logEvent('sensibilidad_usada')
+  }, [vista])
+
   // ¿Hay datos cargados? (para confirmar antes de pisarlos). El borrador se
   // autoguarda, así que reemplazar sin avisar perdería el trabajo en curso.
   const tieneDatos = () => JSON.stringify(inp) !== JSON.stringify(INPUTS_VACIO)
-  const cargarEjemplo = () => { if (!tieneDatos() || confirm('¿Cargar el ejemplo y reemplazar los datos actuales?')) setInp(INPUTS_DEMO) }
+  const cargarEjemplo = () => { if (!tieneDatos() || confirm('¿Cargar el ejemplo y reemplazar los datos actuales?')) { cargaProgramatica.current = true; setInp(DEMO_STATE); logEvent('ejemplo_cargado', { predio: 'CICOMA-SUL' }) } }
   // ¿el formulario actual es exactamente el ejemplo CICOMA-SUL? (para cambiar la sugerencia).
-  const ejemploCargado = JSON.stringify(inp) === JSON.stringify(INPUTS_DEMO)
-  const limpiar = () => { if (confirm('¿Vaciar todos los campos?')) setInp(INPUTS_VACIO) }
-  const cargarEscenario = (inputs: Inputs) => { if (!tieneDatos() || confirm('¿Cargar este escenario y reemplazar los datos actuales?')) setInp(inputs) }
+  const ejemploCargado = JSON.stringify(inp) === JSON.stringify(DEMO_STATE)
+  const limpiar = () => { if (confirm('¿Vaciar todos los campos?')) { if (inp !== INPUTS_VACIO) cargaProgramatica.current = true; setInp(INPUTS_VACIO) } }
+  const cargarEscenario = (inputs: Inputs) => { if (!tieneDatos() || confirm('¿Cargar este escenario y reemplazar los datos actuales?')) { cargaProgramatica.current = true; setInp(inputs) } }
 
   return (
     <>

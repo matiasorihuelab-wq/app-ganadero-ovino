@@ -9,7 +9,7 @@
 //  (V1-01, V1-02). Idealmente extraer estos valores del Excel con un script, no a mano.
 // ============================================================================
 import type { Inputs, Resultados } from '../types.ts'
-import { INPUTS_EJEMPLO } from '../presets.ts'
+import { QA_FIXTURE } from '../presets.ts'
 
 /** Una clave numérica de Resultados con su celda del Excel y el valor esperado. */
 export interface ValorEsperado {
@@ -25,8 +25,8 @@ export interface CasoExcel {
 
 export const CASOS_EXCEL: CasoExcel[] = [
   {
-    nombre: 'Cord Dest — Merino Australiano (ejemplo)',
-    inputs: INPUTS_EJEMPLO,
+    nombre: 'Cord Dest — QA_FIXTURE (validación Excel)',
+    inputs: QA_FIXTURE,
     esperado: {
       ingresoLana: { celda: 'C39', valor: 18969.352135854202 },
       ingresoCarne: { celda: 'C41', valor: 21388.539672 },

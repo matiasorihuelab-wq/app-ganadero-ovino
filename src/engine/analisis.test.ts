@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest'
 import { calcular } from './calc'
-import { INPUTS_EJEMPLO, INPUTS_VACIO } from './presets'
+import { QA_FIXTURE, INPUTS_VACIO } from './presets'
 import { generarInforme, construirIndicadores } from './analisis'
 
 const finito = (n: number) => Number.isFinite(n)
 
 describe('informe de análisis crítico', () => {
-  const r = calcular(INPUTS_EJEMPLO)
-  const inf = generarInforme(INPUTS_EJEMPLO, r)
+  const r = calcular(QA_FIXTURE)
+  const inf = generarInforme(QA_FIXTURE, r)
 
   it('genera un informe completo con el ejemplo', () => {
     expect(inf.vacio).toBe(false)
@@ -52,7 +52,7 @@ describe('informe de análisis crítico', () => {
   })
 
   it('con rendimientoCanal fuera de rango (>1) el invariante optimista≥base≥pesimista se mantiene', () => {
-    const raro = { ...INPUTS_EJEMPLO, rendimientoCanal: 1.5 }
+    const raro = { ...QA_FIXTURE, rendimientoCanal: 1.5 }
     const infR = generarInforme(raro, calcular(raro))
     const m = (n: string) => infR.escenarios.find((e) => e.nombre === n)!.margenNeto
     expect(m('Optimista')).toBeGreaterThanOrEqual(m('Base'))
@@ -67,8 +67,8 @@ describe('informe de análisis crítico', () => {
   })
 
   it('indicadores: la señalada se expresa en % (fracción × 100)', () => {
-    const ind = construirIndicadores(INPUTS_EJEMPLO, r)
-    expect(ind.senaladaPct).toBeCloseTo(INPUTS_EJEMPLO.senaladaBase * 100, 6)
+    const ind = construirIndicadores(QA_FIXTURE, r)
+    expect(ind.senaladaPct).toBeCloseTo(QA_FIXTURE.senaladaBase * 100, 6)
   })
 
   it('sin datos → informe vacío', () => {

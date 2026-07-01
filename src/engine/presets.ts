@@ -13,7 +13,12 @@ export const MEDICAMENTOS_BASE: Medicamento[] = [
 ]
 
 // ============================================================================
-//  PRESET GENÉRICO — todo en 0 / vacío. Sólo constantes estructurales del modelo.
+//  INPUTS_VACIO — estado inicial del USER_STATE: todo en 0 / vacío (sin nombre de
+//  predio por defecto). Es el punto de partida del usuario y la base de saneo.
+//  Los tres estados del sistema, sin superposición:
+//    · INPUTS_VACIO → USER_STATE inicial (libre; el usuario lo edita)
+//    · DEMO_STATE   → único dataset demo visible en UI (CICOMA-SUL, positivo)
+//    · QA_FIXTURE   → solo tests/validación (Excel 18/18), NUNCA en la UI
 // ============================================================================
 export const INPUTS_VACIO: Inputs = {
   nombrePredio: '',
@@ -100,12 +105,14 @@ export function sanitizeInputs(raw: unknown): Inputs {
 }
 
 // ============================================================================
-//  PRESET EJEMPLO — Merino Australiano (valores exactos del Excel de referencia)
-//  Sólo para QA / demostración. Reproduce los números del Excel.
+//  QA_FIXTURE — fixture de VALIDACIÓN (uso interno de tests). NO se muestra en la UI.
+//  Reproduce los valores exactos del Excel de referencia y valida 18/18. No cambiar
+//  sus números: rompería la validación del motor. Sin nombre de predio (es un fixture,
+//  no un establecimiento demo). El único dataset demo visible es DEMO_STATE (CICOMA-SUL).
 // ============================================================================
-export const INPUTS_EJEMPLO: Inputs = {
+export const QA_FIXTURE: Inputs = {
   ...INPUTS_VACIO,
-  nombrePredio: 'Ejemplo Merino Australiano',
+  nombrePredio: '',
   raza: 'Merino Australiano',
   dotacionSegura: 0.7,
   pesoAdulto: 47,
@@ -178,12 +185,12 @@ export const INPUTS_EJEMPLO: Inputs = {
 //  (resultado económico POSITIVO). Es el caso que carga el usuario con el botón
 //  "Cargar ejemplo" (seed por defecto sugerido).
 //
-//  Es INDEPENDIENTE del fixture de QA (INPUTS_EJEMPLO), que reproduce los valores
-//  exactos del Excel de referencia y valida 18/18. No tocar INPUTS_EJEMPLO: cambiarlo
+//  Es INDEPENDIENTE del fixture de QA (QA_FIXTURE), que reproduce los valores
+//  exactos del Excel de referencia y valida 18/18. No tocar QA_FIXTURE: cambiarlo
 //  rompería la validación del motor.
 // ============================================================================
-export const INPUTS_DEMO: Inputs = {
-  ...INPUTS_EJEMPLO,
+export const DEMO_STATE: Inputs = {
+  ...QA_FIXTURE,
   nombrePredio: 'CICOMA-SUL',
   raza: 'Merino Dohne',
   // Escala eficiente: majada grande con dotación de personal ajustada.

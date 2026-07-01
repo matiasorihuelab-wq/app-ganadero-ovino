@@ -229,15 +229,17 @@ NRC/INRA/AFRC).
 ## 4. Variables utilizadas
 
 Tabla del modelo de entrada (`Inputs`, ver `src/engine/types.ts`). "Interno" es el nombre
-de celda del Excel usado en el código. "Ejemplo" es el valor del preset Merino
-(`INPUTS_EJEMPLO`); "Vacío" es el valor por defecto del preset genérico (`INPUTS_VACIO`).
+de celda del Excel usado en el código. "Ejemplo" es el valor de referencia del
+**fixture de validación** (`QA_FIXTURE`, solo tests / Excel 18/18; no se muestra en la
+UI); el dataset demo visible en la aplicación es `DEMO_STATE` (**CICOMA-SUL**). "Vacío"
+es el valor por defecto del preset genérico (`INPUTS_VACIO`).
 Los campos numéricos aceptan solo valores **≥ 0** (no hay tope superior forzado). Los
 porcentajes se **editan como %** pero se **almacenan como fracción 0–1**.
 
 ### 4.1 Predio
 | Mostrado | Interno | Unidad | Vacío | Ejemplo | Explicación |
 |---|---|---|---|---|---|
-| Nombre del predio | nombrePredio | texto | "" | "Ejemplo Merino Australiano" | Identificación; usado en exportaciones |
+| Nombre del predio | nombrePredio | texto | "" | "" (fixture sin nombre; demo UI: "CICOMA-SUL") | Identificación; usado en exportaciones |
 | Raza | raza | texto | "" | "Merino Australiano" | Informativa; la app es genérica |
 | Ovejas madres encarneradas | ovejasEncarneradas (B12) | # | 0 | 600 | Majada base de cría; dispara todo el cálculo |
 | Peso adulto ovejas | pesoAdulto (B3) | kg | 0 | 47 | Base de pesos de lana y de UG |

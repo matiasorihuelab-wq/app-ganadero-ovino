@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest'
 import { construirTimeline } from './timeline'
 import { calcular } from './calc'
-import { INPUTS_EJEMPLO } from './presets'
+import { QA_FIXTURE } from './presets'
 import { coincide } from './__tests__/excel-fixtures'
 
 describe('timeline (evolución mensual)', () => {
-  const r = calcular(INPUTS_EJEMPLO)
-  const meses = construirTimeline(INPUTS_EJEMPLO, r)
+  const r = calcular(QA_FIXTURE)
+  const meses = construirTimeline(QA_FIXTURE, r)
 
   it('devuelve 12 meses', () => {
     expect(meses).toHaveLength(12)

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { createLocalStorageEscenarioRepository } from './local-storage-escenario-repository'
 import { createLocalStorageBorradorRepository } from './borrador-repository'
-import { INPUTS_VACIO, INPUTS_EJEMPLO } from '../engine/presets'
+import { INPUTS_VACIO, QA_FIXTURE } from '../engine/presets'
 
 /** Storage en memoria para tests (implementa la interfaz Web Storage). */
 function fakeStorage(): Storage {
@@ -26,9 +26,9 @@ describe('EscenarioRepository (localStorage adapter)', () => {
   it('guardar → listar → eliminar (ida y vuelta)', () => {
     const repo = createLocalStorageEscenarioRepository(fakeStorage())
     expect(repo.listar()).toEqual([])
-    const e = repo.guardar('Mi escenario', INPUTS_EJEMPLO)
+    const e = repo.guardar('Mi escenario', QA_FIXTURE)
     expect(e.nombre).toBe('Mi escenario')
-    expect(e.inputs.raza).toBe(INPUTS_EJEMPLO.raza)
+    expect(e.inputs.raza).toBe(QA_FIXTURE.raza)
     expect(repo.listar()).toHaveLength(1)
     repo.eliminar(e.id)
     expect(repo.listar()).toEqual([])

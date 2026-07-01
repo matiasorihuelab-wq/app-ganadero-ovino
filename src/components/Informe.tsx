@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import type { Inputs, Resultados } from '../engine/types'
 import { generarInforme, type Prioridad, type Severidad } from '../engine/analisis'
 import { exportarPDF } from '../utils/exportar'
+import { logEvent } from '../observabilidad'
 import { fmtUSD, fmtNum } from '../utils/format'
 import { APP_VERSION_LABEL } from '../version'
 
@@ -31,7 +32,7 @@ export default function Informe({ inp, r }: { inp: Inputs; r: Resultados }) {
           <h2 style={{ marginBottom: 2 }}>📋 Informe de Análisis Crítico</h2>
           <div className="hint">{ind.predio} · {ind.raza} · {informe.fecha} · versión {APP_VERSION_LABEL}</div>
         </div>
-        <button className="btn-sec no-print" onClick={exportarPDF} title="Imprimir / guardar como PDF">📥 Descargar informe (PDF)</button>
+        <button className="btn-sec no-print" onClick={() => { logEvent('informe_pdf'); exportarPDF() }} title="Imprimir / guardar como PDF">📥 Descargar informe (PDF)</button>
       </div>
 
       {/* 1. Diagnóstico */}
