@@ -28,7 +28,7 @@ export default function Formulario({ inp, set }: { inp: Inputs; set: (p: Partial
     <div>
       {/* 1. Predio */}
       <Section title="1 · Identificación y Predio" defaultOpen>
-        <TextField label="Nombre del predio" value={inp.nombrePredio} onChange={(v) => set({ nombrePredio: v })} placeholder="Ej: Estancia La Esperanza" />
+        <TextField label="Nombre del predio" value={inp.nombrePredio} onChange={(v) => set({ nombrePredio: v })} placeholder="CICOMA - SUL" />
         <div className="grid2">
           <NumberField label="Ovejas madres encarneradas" value={inp.ovejasEncarneradas} onChange={(v) => set({ ovejasEncarneradas: v })} suffix="#" />
           <NumberField label="Peso adulto ovejas" value={inp.pesoAdulto} onChange={(v) => set({ pesoAdulto: v })} suffix="kg" />
