@@ -9,7 +9,7 @@
 //
 // Antes era cache-first puro: una URL cacheada no se actualizaba nunca y la app
 // quedaba congelada en la primera versión vista. Esto lo corrige.
-const CACHE = 'rentab-ovina-v2'
+const CACHE = 'rentab-ovina-v3'
 
 self.addEventListener('install', () => self.skipWaiting())
 
